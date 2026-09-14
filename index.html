@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>নাস্তা ভাই | অনলাইন নাস্তা অর্ডার</title>
+
+  <meta name="description"
+        content="নাস্তা ভাই - সিঙ্গারা, চমচা, কেক, কলা ও রুটি অনলাইনে অর্ডার করুন। সহজ WhatsApp অর্ডার ও দ্রুত ডেলিভারি।">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, "Noto Sans Bengali", sans-serif;
+      background: #fffaf3;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* HEADER */
+    header {
+      background: #e65100;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #ffe0b2;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #ff9800, #e65100);
+      color: white;
+      text-align: center;
+      padding: 70px 20px;
+    }
+
+    .hero h1 {
+      font-size: 45px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 20px;
+      margin-bottom: 25px;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      background: white;
+      color: #e65100;
+      padding: 13px 25px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .hero-btn:hover {
+      background: #fff3e0;
+    }
+
+    /* COMMON */
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 50px 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-title h2 {
+      font-size: 32px;
+      color: #e65100;
+    }
+
+    .section-title p {
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* MENU */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .food-card {
+      background: white;
+      border-radius: 15px;
+      padding: 22px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: 0.2s;
+    }
+
+    .food-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .food-icon {
+      font-size: 55px;
+      margin-bottom: 10px;
+    }
+
+    .food-card h3 {
+      font-size: 23px;
+      margin-bottom: 5px;
+    }
+
+    .price {
+      color: #e65100;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .quantity {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .quantity button {
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 50%;
+      background: #e65100;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .quantity button:hover {
+      background: #bf360c;
+    }
+
+    .quantity span {
+      font-size: 20px;
+      font-weight: bold;
+      min-width: 25px;
+    }
+
+    /* ORDER */
+    .order-section {
+      background: #fff3e0;
+    }
+
+    .order-box {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #e65100;
+    }
+
+    .form-group textarea {
+      height: 90px;
+      resize: vertical;
+    }
+
+    /* SUMMARY */
+    .summary {
+      background: #fff8e1;
+      border-radius: 10px;
+      padding: 18px;
+      margin: 20px 0;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+    }
+
+    .total-row {
+      border-top: 1px solid #ddd;
+      margin-top: 12px;
+      padding-top: 12px;
+      font-size: 21px;
+      font-weight: bold;
+      color: #e65100;
+    }
+
+    #selectedItems {
+      margin-bottom: 12px;
+    }
+
+    .selected-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0;
+    }
+
+    /* BUTTONS */
+    .order-button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      background: #25d366;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .order-button:hover {
+      background: #1ebe5d;
+    }
+
+    .call-button {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      padding: 13px;
+      border-radius: 10px;
+      background: #e65100;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* INFO */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .info-card {
+      background: white;
+      padding: 25px;
+      text-align: center;
+      border-radius: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    }
+
+    .info-card .icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .info-card h3 {
+      color: #e65100;
+      margin-bottom: 6px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+    }
+
+    footer p {
+      margin: 5px 0;
+    }
+
+    /* MOBILE */
+    @media (max-width: 800px) {
+
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      nav {
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 550px) {
+
+      .header-inner {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      nav {
+        font-size: 14px;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 50px 15px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 17px;
+      }
+
+      .order-box {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+
+    <div class="logo">
+      🍴 নাস্তা ভাই
+    </div>
+
+    <nav>
+      <a href="#home">হোম</a>
+      <a href="#menu">মেনু</a>
+      <a href="#order">অর্ডার</a>
+      <a href="#contact">যোগাযোগ</a>
+    </nav>
+
+  </div>
+</header>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+  <h1>🍴 নাস্তা ভাই</h1>
+
+  <p>
+    সহজে অর্ডার করুন, মজায় নাস্তা করুন!
+  </p>
+
+  <a href="#menu" class="hero-btn">
+    🍽️ মেনু দেখুন
+  </a>
+
+</section>
+
+
+<!-- MENU -->
+<section class="container" id="menu">
+
+  <div class="section-title">
+
+    <h2>আমাদের মেনু</h2>
+
+    <p>
+      আপনার পছন্দের নাস্তা বেছে নিন
+    </p>
+
+  </div>
+
+
+  <div class="menu-grid" id="menuGrid"></div>
+
+</section>
+
+
+<!-- ORDER -->
+<section class="order-section" id="order">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>🛒 অর্ডার করুন</h2>
+
+      <p>
+        তথ্য পূরণ করে WhatsApp-এর মাধ্যমে অর্ডার পাঠান
+      </p>
+
+    </div>
+
+
+    <div class="order-box">
+
+      <div class="form-group">
+
+        <label for="customerName">
+          আপনার নাম *
+        </label>
+
+        <input
+          type="text"
+          id="customerName"
+          placeholder="আপনার নাম লিখুন"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="customerPhone">
+          মোবাইল নম্বর *
+        </label>
+
+        <input
+          type="tel"
+          id="customerPhone"
+          placeholder="01XXXXXXXXX"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="customerAddress">
+          ডেলিভারি ঠিকানা *
+        </label>
+
+        <textarea
+          id="customerAddress"
+          placeholder="আপনার সম্পূর্ণ ঠিকানা লিখুন"
+        ></textarea>
+
+      </div>
+
+
+      <div class="summary">
+
+        <h3 style="margin-bottom:12px;">
+          🧾 অর্ডারের বিবরণ
+        </h3>
+
+        <div id="selectedItems">
+          কোনো পণ্য নির্বাচন করা হয়নি।
+        </div>
+
+        <div class="summary-row">
+
+          <span>
+            পণ্যের মূল্য
+          </span>
+
+          <strong>
+            ৳<span id="subtotal">0</span>
+          </strong>
+
+        </div>
+
+
+        <div class="summary-row">
+
+          <span>
+            ডেলিভারি চার্জ
+          </span>
+
+          <strong>
+            ৳<span id="delivery">0</span>
+          </strong>
+
+        </div>
+
+
+        <div class="summary-row total-row">
+
+          <span>
+            সর্বমোট
+          </span>
+
+          <strong>
+            ৳<span id="total">0</span>
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="order-button"
+        onclick="sendOrder()"
+      >
+        📲 WhatsApp-এ অর্ডার পাঠান
+      </button>
+
+
+      <a
+        class="call-button"
+        href="tel:+8801XXXXXXXXX"
+      >
+        📞 কল করুন
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- INFORMATION -->
+<section class="container" id="contact">
+
+  <div class="section-title">
+
+    <h2>কেন নাস্তা ভাই?</h2>
+
+    <p>
+      আপনার সুবিধাই আমাদের অগ্রাধিকার
+    </p>
+
+  </div>
+
+
+  <div class="info-grid">
+
+    <div class="info-card">
+
+      <div class="icon">
+        🥟
+      </div>
+
+      <h3>
+        তাজা নাস্তা
+      </h3>
+
+      <p>
+        প্রতিদিনের জন্য সুস্বাদু ও তাজা নাস্তা।
+      </p>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <div class="icon">
+        🚚
+      </div>
+
+      <h3>
+        সহজ ডেলিভারি
+      </h3>
+
+      <p>
+        কান্তির হাট ও আশেপাশের এলাকায় ডেলিভারি।
+      </p>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <div class="icon">
+        📲
+      </div>
+
+      <h3>
+        সহজ অর্ডার
+      </h3>
+
+      <p>
+        কয়েকটি ক্লিকেই WhatsApp-এর মাধ্যমে অর্ডার করুন।
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- PAYMENT -->
+<section class="container">
+
+  <div class="section-title">
+
+    <h2>💳 পেমেন্ট</h2>
+
+    <p>
+      bKash পেমেন্ট সুবিধা শীঘ্রই যুক্ত করা হবে।
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+  <p>
+    © 2026 নাস্তা ভাই
+  </p>
+
+  <p>
+    📍 কান্তির হাট
+  </p>
+
+  <p>
+    সহজে অর্ডার করুন, মজায় নাস্তা করুন ❤️
+  </p>
+
+</footer>
+
+
+<script>
+
+  /*
+   * ==========================
+   * পণ্যের তালিকা
+   * ==========================
+   *
+   * ভবিষ্যতে এখান থেকেই
+   * পণ্যের নাম ও দাম পরিবর্তন করতে পারবেন।
+   */
+
+  const products = [
+
+    {
+      id: 1,
+      name: "সিঙ্গারা",
+      price: 10,
+      icon: "🥟",
+      qty: 0
+    },
+
+    {
+      id: 2,
+      name: "চমচা",
+      price: 10,
+      icon: "🍘",
+      qty: 0
+    },
+
+    {
+      id: 3,
+      name: "কেক",
+      price: 10,
+      icon: "🍰",
+      qty: 0
+    },
+
+    {
+      id: 4,
+      name: "কলা",
+      price: 10,
+      icon: "🍌",
+      qty: 0
+    },
+
+    {
+      id: 5,
+      name: "রুটি",
+      price: 10,
+      icon: "🫓",
+      qty: 0
+    }
+
+  ];
+
+
+  /*
+   * WhatsApp নম্বর
+   *
+   * এখানে পরে আপনার আসল নম্বর বসাবেন।
+   *
+   * উদাহরণ:
+   * 01712345678
+   *
+   * লিখতে হবে:
+   * 8801712345678
+   */
+
+  const whatsappNumber = "8801XXXXXXXXX";
+
+
+  /*
+   * ডেলিভারি চার্জ
+   *
+   * প্রতি পিস = ১ টাকা
+   */
+
+  const deliveryPerPiece = 1;
+
+
+  /*
+   * MENU দেখানো
+   */
+
+  function renderMenu() {
+
+    const menuGrid =
+      document.getElementById("menuGrid");
+
+    menuGrid.innerHTML = "";
+
+
+    products.forEach(product => {
+
+      const card =
+        document.createElement("div");
+
+      card.className = "food-card";
+
+
+      card.innerHTML = `
+
+        <div class="food-icon">
+          ${product.icon}
+        </div>
+
+        <h3>
+          ${product.name}
+        </h3>
+
+        <div class="price">
+          ৳${product.price}
+        </div>
+
+        <div class="quantity">
+
+          <button
+            onclick="changeQty(${product.id}, -1)"
+          >
+            −
+          </button>
+
+          <span id="qty-${product.id}">
+            ${product.qty}
+          </span>
+
+          <button
+            onclick="changeQty(${product.id}, 1)"
+          >
+            +
+          </button>
+
+        </div>
+
+      `;
+
+
+      menuGrid.appendChild(card);
+
+    });
+
+  }
+
+
+  /*
+   * QUANTITY পরিবর্তন
+   */
+
+  function changeQty(id, change) {
+
+    const product =
+      products.find(p => p.id === id);
+
+
+    if (!product) {
+      return;
+    }
+
+
+    product.qty += change;
+
+
+    if (product.qty < 0) {
+      product.qty = 0;
+    }
+
+
+    document.getElementById(
+      `qty-${id}`
+    ).textContent = product.qty;
+
+
+    updateSummary();
+
+  }
+
+
+  /*
+   * ORDER SUMMARY আপডেট
+   */
+
+  function updateSummary() {
+
+    const selectedItems =
+      document.getElementById("selectedItems");
+
+
+    let subtotal = 0;
+
+    let totalPieces = 0;
+
+    let html = "";
+
+
+    products.forEach(product => {
+
+      if (product.qty > 0) {
+
+        const itemTotal =
+          product.price * product.qty;
+
+
+        subtotal += itemTotal;
+
+        totalPieces += product.qty;
+
+
+        html += `
+
+          <div class="selected-item">
+
+            <span>
+              ${product.name} × ${product.qty}
+            </span>
+
+            <strong>
+              ৳${itemTotal}
+            </strong>
+
+          </div>
+
+        `;
+
+      }
+
+    });
+
+
+    if (html === "") {
+
+      selectedItems.innerHTML =
+        "কোনো পণ্য নির্বাচন করা হয়নি।";
+
+    } else {
+
+      selectedItems.innerHTML = html;
+
+    }
+
+
+    const delivery =
+      totalPieces > 0
+        ? totalPieces * deliveryPerPiece
+        : 0;
+
+
+    const total =
+      subtotal + delivery;
+
+
+    document.getElementById(
+      "subtotal"
+    ).textContent = subtotal;
+
+
+    document.getElementById(
+      "delivery"
+    ).textContent = delivery;
+
+
+    document.getElementById(
+      "total"
+    ).textContent = total;
+
+  }
+
+
+  /*
+   * WHATSAPP ORDER
+   */
+
+  function sendOrder() {
+
+    const name =
+      document.getElementById(
+        "customerName"
+      ).value.trim();
+
+
+    const phone =
+      document.getElementById(
+        "customerPhone"
+      ).value.trim();
+
+
+    const address =
+      document.getElementById(
+        "customerAddress"
+      ).value.trim();
+
+
+    if (!name) {
+
+      alert("দয়া করে আপনার নাম লিখুন।");
+
+      return;
+
+    }
+
+
+    if (!phone) {
+
+      alert("দয়া করে আপনার মোবাইল নম্বর লিখুন।");
+
+      return;
+
+    }
+
+
+    if (!address) {
+
+      alert("দয়া করে আপনার ডেলিভারি ঠিকানা লিখুন।");
+
+      return;
+
+    }
+
+
+    const selectedProducts =
+      products.filter(
+        product => product.qty > 0
+      );
+
+
+    if (selectedProducts.length === 0) {
+
+      alert(
+        "দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।"
+      );
+
+      return;
+
+    }
+
+
+    let subtotal = 0;
+
+    let totalPieces = 0;
+
+    let orderText = "";
+
+
+    selectedProducts.forEach(product => {
+
+      const itemTotal =
+        product.price * product.qty;
+
+
+      subtotal += itemTotal;
+
+      totalPieces += product.qty;
+
+
+      orderText +=
+        `${product.name} × ${product.qty} = ৳${itemTotal}\n`;
+
+    });
+
+
+    const delivery =
+      totalPieces * deliveryPerPiece;
+
+
+    const total =
+      subtotal + delivery;
+
+
+    const message =
+
+`🍴 *নাস্তা ভাই - নতুন অর্ডার*
+
+👤 নাম: ${name}
+
+📱 মোবাইল: ${phone}
+
+📍 ঠিকানা:
+${address}
+
+🛒 *অর্ডারের তালিকা:*
+${orderText}
+💰 পণ্যের মূল্য: ৳${subtotal}
+
+🚚 ডেলিভারি চার্জ: ৳${delivery}
+
+💵 *সর্বমোট: ৳${total}*
+
+ধন্যবাদ ❤️
+নাস্তা ভাই`;
+
+
+    const encodedMessage =
+      encodeURIComponent(message);
+
+
+    const whatsappURL =
+      `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+
+    window.open(
+      whatsappURL,
+      "_blank"
+    );
+
+  }
+
+
+  /*
+   * WEBSITE চালু হওয়ার সময়
+   */
+
+  renderMenu();
+
+  updateSummary();
+
+</script>
+
+</body>
+</html>
