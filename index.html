@@ -1,29 +1,13 @@
 <!DOCTYPE html>
 <html lang="bn">
-
 <head>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-    const supabaseUrl = "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
-    const supabaseKey = "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
-
-    const supabase = window.supabase.createClient(
-      supabaseUrl,
-      supabaseKey
-    );
-  </script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>নাস্তা ভাই | অনলাইন নাস্তা অর্ডার</title>
 
-  <meta name="description"
-        content="নাস্তা ভাই - সিঙ্গারা, চমচা, কেক, কলা ও রুটি অনলাইনে অর্ডার করুন। সহজ WhatsApp অর্ডার ও দ্রুত ডেলিভারি।">
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * {
@@ -39,60 +23,55 @@
       line-height: 1.6;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* HEADER */
     header {
-      background: #e65100;
+      background: #ff7a00;
       color: white;
+      padding: 15px 20px;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
     .header-inner {
       max-width: 1100px;
       margin: auto;
-      padding: 14px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 20px;
+      gap: 15px;
     }
 
     .logo {
-      font-size: 26px;
+      font-size: 25px;
       font-weight: bold;
       white-space: nowrap;
     }
 
     nav {
       display: flex;
-      gap: 20px;
+      gap: 18px;
     }
 
     nav a {
+      color: white;
+      text-decoration: none;
       font-weight: bold;
     }
 
     nav a:hover {
-      color: #ffe0b2;
+      text-decoration: underline;
     }
 
-    /* HERO */
     .hero {
-      background: linear-gradient(135deg, #ff9800, #e65100);
+      background: linear-gradient(135deg, #ff8a00, #ff5e00);
       color: white;
       text-align: center;
-      padding: 70px 20px;
+      padding: 65px 20px;
     }
 
     .hero h1 {
-      font-size: 45px;
+      font-size: 38px;
       margin-bottom: 12px;
     }
 
@@ -104,116 +83,97 @@
     .hero-btn {
       display: inline-block;
       background: white;
-      color: #e65100;
-      padding: 13px 25px;
+      color: #ff6500;
+      padding: 12px 25px;
       border-radius: 30px;
+      text-decoration: none;
       font-weight: bold;
-      font-size: 17px;
     }
 
-    .hero-btn:hover {
-      background: #fff3e0;
-    }
-
-    /* COMMON */
-    .container {
+    section {
       max-width: 1100px;
       margin: auto;
-      padding: 50px 20px;
+      padding: 45px 20px;
     }
 
     .section-title {
       text-align: center;
+      font-size: 30px;
+      color: #e85d00;
       margin-bottom: 30px;
     }
 
-    .section-title h2 {
-      font-size: 32px;
-      color: #e65100;
-    }
-
-    .section-title p {
-      color: #666;
-      margin-top: 5px;
-    }
-
     /* MENU */
-    .menu-grid {
+
+    #menuGrid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
     }
 
-    .food-card {
+    .product-card {
       background: white;
       border-radius: 15px;
-      padding: 22px;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      transition: 0.2s;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+      border: 1px solid #eee;
     }
 
-    .food-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .food-icon {
+    .product-icon {
       font-size: 55px;
       margin-bottom: 10px;
     }
 
-    .food-card h3 {
-      font-size: 23px;
+    .product-card h3 {
+      font-size: 21px;
       margin-bottom: 5px;
     }
 
     .price {
-      color: #e65100;
-      font-size: 22px;
+      color: #e85d00;
+      font-size: 19px;
       font-weight: bold;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
-    .quantity {
+    .quantity-control {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
     }
 
-    .quantity button {
+    .quantity-control button {
       width: 38px;
       height: 38px;
       border: none;
       border-radius: 50%;
-      background: #e65100;
+      background: #ff7a00;
       color: white;
       font-size: 22px;
       cursor: pointer;
     }
 
-    .quantity button:hover {
-      background: #bf360c;
+    .quantity-control button:hover {
+      background: #e85d00;
     }
 
-    .quantity span {
+    .quantity {
+      min-width: 30px;
       font-size: 20px;
       font-weight: bold;
-      min-width: 25px;
     }
 
     /* ORDER */
-    .order-section {
-      background: #fff3e0;
-    }
 
     .order-box {
+      background: white;
       max-width: 700px;
       margin: auto;
-      background: white;
       padding: 30px;
       border-radius: 18px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: 0 3px 15px rgba(0,0,0,0.10);
     }
 
     .form-group {
@@ -223,32 +183,25 @@
     .form-group label {
       display: block;
       font-weight: bold;
-      margin-bottom: 7px;
+      margin-bottom: 6px;
     }
 
     .form-group input,
     .form-group textarea {
       width: 100%;
-      padding: 13px;
-      border: 1px solid #ddd;
+      padding: 12px;
+      border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
-      outline: none;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: #e65100;
     }
 
     .form-group textarea {
-      height: 90px;
+      min-height: 90px;
       resize: vertical;
     }
 
-    /* SUMMARY */
     .summary {
-      background: #fff8e1;
+      background: #fff6e9;
       border-radius: 10px;
       padding: 18px;
       margin: 20px 0;
@@ -257,30 +210,19 @@
     .summary-row {
       display: flex;
       justify-content: space-between;
-      margin: 8px 0;
+      padding: 5px 0;
     }
 
     .total-row {
       border-top: 1px solid #ddd;
-      margin-top: 12px;
-      padding-top: 12px;
-      font-size: 21px;
+      margin-top: 8px;
+      padding-top: 10px;
+      font-size: 20px;
       font-weight: bold;
-      color: #e65100;
+      color: #e85d00;
     }
 
-    #selectedItems {
-      margin-bottom: 12px;
-    }
-
-    .selected-item {
-      display: flex;
-      justify-content: space-between;
-      margin: 6px 0;
-    }
-
-    /* BUTTONS */
-    .order-button {
+    .order-btn {
       width: 100%;
       padding: 15px;
       border: none;
@@ -292,103 +234,57 @@
       cursor: pointer;
     }
 
-    .order-button:hover {
-      background: #1ebe5d;
+    .order-btn:hover {
+      background: #1da851;
     }
 
-    .call-button {
-      display: block;
+    /* CONTACT */
+
+    .contact-box {
       text-align: center;
-      margin-top: 12px;
-      padding: 13px;
-      border-radius: 10px;
-      background: #e65100;
-      color: white;
-      font-weight: bold;
-    }
-
-    /* INFO */
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .info-card {
       background: white;
-      padding: 25px;
-      text-align: center;
+      padding: 30px;
       border-radius: 15px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .info-card .icon {
-      font-size: 40px;
-      margin-bottom: 10px;
+    .contact-box p {
+      margin: 8px 0;
+      font-size: 17px;
     }
 
-    .info-card h3 {
-      color: #e65100;
-      margin-bottom: 6px;
-    }
-
-    /* FOOTER */
     footer {
       background: #333;
       color: white;
       text-align: center;
-      padding: 25px 15px;
-    }
-
-    footer p {
-      margin: 5px 0;
+      padding: 20px;
+      margin-top: 30px;
     }
 
     /* MOBILE */
-    @media (max-width: 800px) {
 
-      .menu-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    @media (max-width: 650px) {
 
-      .info-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero h1 {
-        font-size: 36px;
+      .header-inner {
+        flex-direction: column;
       }
 
       nav {
         gap: 12px;
-      }
-    }
-
-    @media (max-width: 550px) {
-
-      .header-inner {
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      nav {
-        font-size: 14px;
-      }
-
-      .menu-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        padding: 50px 15px;
+        flex-wrap: wrap;
+        justify-content: center;
       }
 
       .hero h1 {
-        font-size: 32px;
+        font-size: 30px;
       }
 
       .hero p {
         font-size: 17px;
+      }
+
+      .section-title {
+        font-size: 26px;
       }
 
       .order-box {
@@ -400,82 +296,66 @@
 
 <body>
 
-<!-- HEADER -->
-<header>
-  <div class="header-inner">
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
 
-    <div class="logo">
-      🍴 নাস্তা ভাই
+      <div class="logo">
+        🍴 নাস্তা ভাই
+      </div>
+
+      <nav>
+        <a href="#home">হোম</a>
+        <a href="#menu">মেনু</a>
+        <a href="#order">অর্ডার</a>
+        <a href="#contact">যোগাযোগ</a>
+      </nav>
+
     </div>
-
-    <nav>
-      <a href="#home">হোম</a>
-      <a href="#menu">মেনু</a>
-      <a href="#order">অর্ডার</a>
-      <a href="#contact">যোগাযোগ</a>
-    </nav>
-
-  </div>
-</header>
+  </header>
 
 
-<!-- HERO -->
-<section class="hero" id="home">
+  <!-- HERO -->
+  <section class="hero" id="home">
 
-  <h1>🍴 নাস্তা ভাই</h1>
-
-  <p>
-    সহজে অর্ডার করুন, মজায় নাস্তা করুন!
-  </p>
-
-  <a href="#menu" class="hero-btn">
-    🍽️ মেনু দেখুন
-  </a>
-
-</section>
-
-
-<!-- MENU -->
-<section class="container" id="menu">
-
-  <div class="section-title">
-
-    <h2>আমাদের মেনু</h2>
+    <h1>সহজে অর্ডার করুন, মজায় নাস্তা করুন!</h1>
 
     <p>
-      আপনার পছন্দের নাস্তা বেছে নিন
+      আপনার পছন্দের নাস্তা এখন ঘরে বসেই অর্ডার করুন।
     </p>
 
-  </div>
+    <a href="#menu" class="hero-btn">
+      🍴 মেনু দেখুন
+    </a>
+
+  </section>
 
 
-  <div class="menu-grid" id="menuGrid"></div>
+  <!-- MENU -->
+  <section id="menu">
 
-</section>
+    <h2 class="section-title">
+      🍴 আমাদের মেনু
+    </h2>
+
+    <div id="menuGrid"></div>
+
+  </section>
 
 
-<!-- ORDER -->
-<section class="order-section" id="order">
+  <!-- ORDER -->
+  <section id="order">
 
-  <div class="container">
-
-    <div class="section-title">
-
-      <h2>🛒 অর্ডার করুন</h2>
-
-      <p>
-        তথ্য পূরণ করে WhatsApp-এর মাধ্যমে অর্ডার পাঠান
-      </p>
-
-    </div>
-
+    <h2 class="section-title">
+      🛒 অর্ডার করুন
+    </h2>
 
     <div class="order-box">
 
       <div class="form-group">
 
         <label for="customerName">
-          আপনার নাম *
+          👤 আপনার নাম
         </label>
 
         <input
@@ -490,7 +370,7 @@
       <div class="form-group">
 
         <label for="customerPhone">
-          মোবাইল নম্বর *
+          📱 মোবাইল নম্বর
         </label>
 
         <input
@@ -505,7 +385,7 @@
       <div class="form-group">
 
         <label for="customerAddress">
-          ডেলিভারি ঠিকানা *
+          📍 ডেলিভারি ঠিকানা
         </label>
 
         <textarea
@@ -516,381 +396,445 @@
       </div>
 
 
+      <!-- SUMMARY -->
+
       <div class="summary">
 
-        <h3 style="margin-bottom:12px;">
-          🧾 অর্ডারের বিবরণ
-        </h3>
+        <h3>🛒 অর্ডারের হিসাব</h3>
 
         <div id="selectedItems">
-          কোনো পণ্য নির্বাচন করা হয়নি।
+          এখনো কোনো পণ্য নির্বাচন করা হয়নি।
         </div>
 
         <div class="summary-row">
-
-          <span>
-            পণ্যের মূল্য
-          </span>
-
-          <strong>
-            ৳<span id="subtotal">0</span>
-          </strong>
-
+          <span>পণ্যের মূল্য:</span>
+          <span id="subtotal">৳0</span>
         </div>
-
 
         <div class="summary-row">
-
-          <span>
-            ডেলিভারি চার্জ
-          </span>
-
-          <strong>
-            ৳<span id="delivery">0</span>
-          </strong>
-
+          <span>ডেলিভারি চার্জ:</span>
+          <span id="delivery">৳0</span>
         </div>
-
 
         <div class="summary-row total-row">
-
-          <span>
-            সর্বমোট
-          </span>
-
-          <strong>
-            ৳<span id="total">0</span>
-          </strong>
-
+          <span>সর্বমোট:</span>
+          <span id="total">৳0</span>
         </div>
 
       </div>
 
 
       <button
-        class="order-button"
+        class="order-btn"
         onclick="sendOrder()"
       >
-        📲 WhatsApp-এ অর্ডার পাঠান
+        📱 WhatsApp-এ অর্ডার করুন
       </button>
 
+    </div>
 
-      <a
-        class="call-button"
-        href="tel:+8801XXXXXXXXX"
-      >
-        📞 কল করুন
-      </a>
+  </section>
+
+
+  <!-- CONTACT -->
+  <section id="contact">
+
+    <h2 class="section-title">
+      📞 যোগাযোগ
+    </h2>
+
+    <div class="contact-box">
+
+      <p>🍴 <strong>নাস্তা ভাই</strong></p>
+
+      <p>
+        📍 কান্তির হাট
+      </p>
+
+      <p>
+        📱 WhatsApp: আপনার নম্বর
+      </p>
+
+      <p>
+        ⏰ সকাল থেকে সন্ধ্যা পর্যন্ত
+      </p>
 
     </div>
 
-  </div>
-
-</section>
+  </section>
 
 
-<!-- INFORMATION -->
-<section class="container" id="contact">
-
-  <div class="section-title">
-
-    <h2>কেন নাস্তা ভাই?</h2>
+  <!-- FOOTER -->
+  <footer>
 
     <p>
-      আপনার সুবিধাই আমাদের অগ্রাধিকার
+      © 2026 নাস্তা ভাই | সকল অধিকার সংরক্ষিত
     </p>
 
-  </div>
+  </footer>
 
 
-  <div class="info-grid">
+  <!-- JAVASCRIPT -->
 
-    <div class="info-card">
+  <script>
 
-      <div class="icon">
-        🥟
-      </div>
+    /* =================================
+       SUPABASE CONFIGURATION
+    ================================= */
 
-      <h3>
-        তাজা নাস্তা
-      </h3>
+    const supabaseUrl =
+      "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
 
-      <p>
-        প্রতিদিনের জন্য সুস্বাদু ও তাজা নাস্তা।
-      </p>
+    const supabaseKey =
+      "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
 
-    </div>
 
+    const supabaseClient =
+      window.supabase.createClient(
+        supabaseUrl,
+        supabaseKey
+      );
 
-    <div class="info-card">
 
-      <div class="icon">
-        🚚
-      </div>
+    /* =================================
+       WHATSAPP NUMBER
+    ================================= */
 
-      <h3>
-        সহজ ডেলিভারি
-      </h3>
+    const whatsappNumber =
+      "8801533747102";
 
-      <p>
-        কান্তির হাট ও আশেপাশের এলাকায় ডেলিভারি।
-      </p>
 
-    </div>
+    /* =================================
+       PRODUCTS
+    ================================= */
 
+    const products = [
 
-    <div class="info-card">
+      {
+        id: 1,
+        name: "সিঙ্গারা",
+        price: 10,
+        icon: "🥟",
+        qty: 0
+      },
 
-      <div class="icon">
-        📲
-      </div>
+      {
+        id: 2,
+        name: "চমচা",
+        price: 10,
+        icon: "🍘",
+        qty: 0
+      },
 
-      <h3>
-        সহজ অর্ডার
-      </h3>
+      {
+        id: 3,
+        name: "কেক",
+        price: 10,
+        icon: "🍰",
+        qty: 0
+      },
 
-      <p>
-        কয়েকটি ক্লিকেই WhatsApp-এর মাধ্যমে অর্ডার করুন।
-      </p>
+      {
+        id: 4,
+        name: "কলা",
+        price: 10,
+        icon: "🍌",
+        qty: 0
+      },
 
-    </div>
+      {
+        id: 5,
+        name: "রুটি",
+        price: 10,
+        icon: "🫓",
+        qty: 0
+      }
 
-  </div>
+    ];
 
-</section>
 
+    const deliveryPerPiece = 1;
 
-<!-- PAYMENT -->
-<section class="container">
 
-  <div class="section-title">
+    /* =================================
+       SHOW MENU
+    ================================= */
 
-    <h2>💳 পেমেন্ট</h2>
+    function renderMenu() {
 
-    <p>
-      bKash পেমেন্ট সুবিধা শীঘ্রই যুক্ত করা হবে।
-    </p>
+      const menuGrid =
+        document.getElementById("menuGrid");
 
-  </div>
+      menuGrid.innerHTML = "";
 
-</section>
 
+      products.forEach(product => {
 
-<!-- FOOTER -->
-<footer>
+        const card =
+          document.createElement("div");
 
-  <p>
-    © 2026 নাস্তা ভাই
-  </p>
+        card.className = "product-card";
 
-  <p>
-    📍 কান্তির হাট
-  </p>
 
-  <p>
-    সহজে অর্ডার করুন, মজায় নাস্তা করুন ❤️
-  </p>
+        card.innerHTML = `
 
-</footer>
+          <div class="product-icon">
+            ${product.icon}
+          </div>
 
+          <h3>
+            ${product.name}
+          </h3>
 
-<script>
+          <div class="price">
+            ৳${product.price}
+          </div>
 
-  /*
-   * ==========================
-   * পণ্যের তালিকা
-   * ==========================
-   *
-   * ভবিষ্যতে এখান থেকেই
-   * পণ্যের নাম ও দাম পরিবর্তন করতে পারবেন।
-   */
+          <div class="quantity-control">
 
-  const products = [
+            <button
+              onclick="changeQty(${product.id}, -1)"
+            >
+              −
+            </button>
 
-    {
-      id: 1,
-      name: "সিঙ্গারা",
-      price: 10,
-      icon: "🥟",
-      qty: 0
-    },
+            <span
+              class="quantity"
+              id="qty-${product.id}"
+            >
+              0
+            </span>
 
-    {
-      id: 2,
-      name: "চমচা",
-      price: 10,
-      icon: "🍘",
-      qty: 0
-    },
+            <button
+              onclick="changeQty(${product.id}, 1)"
+            >
+              +
+            </button>
 
-    {
-      id: 3,
-      name: "কেক",
-      price: 10,
-      icon: "🍰",
-      qty: 0
-    },
+          </div>
 
-    {
-      id: 4,
-      name: "কলা",
-      price: 10,
-      icon: "🍌",
-      qty: 0
-    },
+        `;
 
-    {
-      id: 5,
-      name: "রুটি",
-      price: 10,
-      icon: "🫓",
-      qty: 0
-    }
 
-  ];
+        menuGrid.appendChild(card);
 
+      });
 
-  /*
-   * WhatsApp নম্বর
-   *
-   * এখানে পরে আপনার আসল নম্বর বসাবেন।
-   *
-   * উদাহরণ:
-   * 01712345678
-   *
-   * লিখতে হবে:
-   * 8801712345678
-   */
-
-  const whatsappNumber = "8801XXXXXXXXX";
-
-
-  /*
-   * ডেলিভারি চার্জ
-   *
-   * প্রতি পিস = ১ টাকা
-   */
-
-  const deliveryPerPiece = 1;
-
-
-  /*
-   * MENU দেখানো
-   */
-
-  function renderMenu() {
-
-    const menuGrid =
-      document.getElementById("menuGrid");
-
-    menuGrid.innerHTML = "";
-
-
-    products.forEach(product => {
-
-      const card =
-        document.createElement("div");
-
-      card.className = "food-card";
-
-
-      card.innerHTML = `
-
-        <div class="food-icon">
-          ${product.icon}
-        </div>
-
-        <h3>
-          ${product.name}
-        </h3>
-
-        <div class="price">
-          ৳${product.price}
-        </div>
-
-        <div class="quantity">
-
-          <button
-            onclick="changeQty(${product.id}, -1)"
-          >
-            −
-          </button>
-
-          <span id="qty-${product.id}">
-            ${product.qty}
-          </span>
-
-          <button
-            onclick="changeQty(${product.id}, 1)"
-          >
-            +
-          </button>
-
-        </div>
-
-      `;
-
-
-      menuGrid.appendChild(card);
-
-    });
-
-  }
-
-
-  /*
-   * QUANTITY পরিবর্তন
-   */
-
-  function changeQty(id, change) {
-
-    const product =
-      products.find(p => p.id === id);
-
-
-    if (!product) {
-      return;
     }
 
 
-    product.qty += change;
+    /* =================================
+       CHANGE QUANTITY
+    ================================= */
+
+    function changeQty(id, change) {
+
+      const product =
+        products.find(p => p.id === id);
 
 
-    if (product.qty < 0) {
-      product.qty = 0;
+      if (!product) {
+        return;
+      }
+
+
+      product.qty += change;
+
+
+      if (product.qty < 0) {
+        product.qty = 0;
+      }
+
+
+      const qtyElement =
+        document.getElementById(`qty-${id}`);
+
+
+      if (qtyElement) {
+
+        qtyElement.textContent =
+          product.qty;
+
+      }
+
+
+      updateSummary();
+
     }
 
 
-    document.getElementById(
-      `qty-${id}`
-    ).textContent = product.qty;
+    /* =================================
+       UPDATE SUMMARY
+    ================================= */
+
+    function updateSummary() {
+
+      const selectedProducts =
+        products.filter(
+          product => product.qty > 0
+        );
 
 
-    updateSummary();
-
-  }
-
-
-  /*
-   * ORDER SUMMARY আপডেট
-   */
-
-  function updateSummary() {
-
-    const selectedItems =
-      document.getElementById("selectedItems");
+      const selectedItems =
+        document.getElementById("selectedItems");
 
 
-    let subtotal = 0;
-
-    let totalPieces = 0;
-
-    let html = "";
+      let subtotal = 0;
+      let totalPieces = 0;
 
 
-    products.forEach(product => {
+      if (selectedProducts.length === 0) {
 
-      if (product.qty > 0) {
+        selectedItems.innerHTML =
+          "এখনো কোনো পণ্য নির্বাচন করা হয়নি।";
+
+      } else {
+
+        let html = "";
+
+
+        selectedProducts.forEach(product => {
+
+          const itemTotal =
+            product.price * product.qty;
+
+
+          subtotal += itemTotal;
+
+          totalPieces += product.qty;
+
+
+          html += `
+            <div class="summary-row">
+              <span>
+                ${product.name} × ${product.qty}
+              </span>
+
+              <span>
+                ৳${itemTotal}
+              </span>
+            </div>
+          `;
+
+        });
+
+
+        selectedItems.innerHTML = html;
+
+      }
+
+
+      const delivery =
+        totalPieces * deliveryPerPiece;
+
+
+      const total =
+        subtotal + delivery;
+
+
+      document.getElementById("subtotal")
+        .textContent = `৳${subtotal}`;
+
+
+      document.getElementById("delivery")
+        .textContent = `৳${delivery}`;
+
+
+      document.getElementById("total")
+        .textContent = `৳${total}`;
+
+    }
+
+
+    /* =================================
+       SEND ORDER
+    ================================= */
+
+    async function sendOrder() {
+
+      const name =
+        document
+          .getElementById("customerName")
+          .value
+          .trim();
+
+
+      const phone =
+        document
+          .getElementById("customerPhone")
+          .value
+          .trim();
+
+
+      const address =
+        document
+          .getElementById("customerAddress")
+          .value
+          .trim();
+
+
+      /* CHECK CUSTOMER INFORMATION */
+
+      if (!name) {
+
+        alert("দয়া করে আপনার নাম লিখুন।");
+
+        return;
+
+      }
+
+
+      if (!phone) {
+
+        alert(
+          "দয়া করে আপনার মোবাইল নম্বর লিখুন।"
+        );
+
+        return;
+
+      }
+
+
+      if (!address) {
+
+        alert(
+          "দয়া করে আপনার ডেলিভারি ঠিকানা লিখুন।"
+        );
+
+        return;
+
+      }
+
+
+      /* SELECTED PRODUCTS */
+
+      const selectedProducts =
+        products.filter(
+          product => product.qty > 0
+        );
+
+
+      if (selectedProducts.length === 0) {
+
+        alert(
+          "দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।"
+        );
+
+        return;
+
+      }
+
+
+      /* CALCULATE */
+
+      let subtotal = 0;
+
+      let totalPieces = 0;
+
+      let orderText = "";
+
+
+      selectedProducts.forEach(product => {
 
         const itemTotal =
           product.price * product.qty;
@@ -901,176 +845,89 @@
         totalPieces += product.qty;
 
 
-        html += `
+        orderText +=
+          `${product.name} × ${product.qty} = ৳${itemTotal}\n`;
 
-          <div class="selected-item">
+      });
 
-            <span>
-              ${product.name} × ${product.qty}
-            </span>
 
-            <strong>
-              ৳${itemTotal}
-            </strong>
+      const delivery =
+        totalPieces * deliveryPerPiece;
 
-          </div>
 
-        `;
+      const total =
+        subtotal + delivery;
+
+
+      /* ORDER ITEMS FOR SUPABASE */
+
+      const orderItems =
+        selectedProducts.map(product => ({
+
+          name: product.name,
+
+          quantity: product.qty,
+
+          price: product.price,
+
+          item_total:
+            product.price * product.qty
+
+        }));
+
+
+      /* =================================
+         SAVE TO SUPABASE
+      ================================= */
+
+      const { error } =
+        await supabaseClient
+          .from("orders")
+          .insert([{
+
+            customer_name: name,
+
+            customer_phone: phone,
+
+            customer_address: address,
+
+            order_items: orderItems,
+
+            subtotal: subtotal,
+
+            delivery_charge: delivery,
+
+            total: total,
+
+            status: "New"
+
+          }]);
+
+
+      if (error) {
+
+        console.error(
+          "Supabase Error:",
+          error
+        );
+
+
+        alert(
+          "অর্ডার সংরক্ষণ করা যায়নি।\n\n" +
+          "দয়া করে আবার চেষ্টা করুন।"
+        );
+
+
+        return;
 
       }
 
-    });
 
+      /* =================================
+         WHATSAPP MESSAGE
+      ================================= */
 
-    if (html === "") {
-
-      selectedItems.innerHTML =
-        "কোনো পণ্য নির্বাচন করা হয়নি।";
-
-    } else {
-
-      selectedItems.innerHTML = html;
-
-    }
-
-
-    const delivery =
-      totalPieces > 0
-        ? totalPieces * deliveryPerPiece
-        : 0;
-
-
-    const total =
-      subtotal + delivery;
-
-
-    document.getElementById(
-      "subtotal"
-    ).textContent = subtotal;
-
-
-    document.getElementById(
-      "delivery"
-    ).textContent = delivery;
-
-
-    document.getElementById(
-      "total"
-    ).textContent = total;
-
-  }
-
-
-  /*
-   * WHATSAPP ORDER
-   */
-
-  async function sendOrder() {
-
-  const name =
-    document.getElementById("customerName").value.trim();
-
-  const phone =
-    document.getElementById("customerPhone").value.trim();
-
-  const address =
-    document.getElementById("customerAddress").value.trim();
-
-
-  if (!name) {
-    alert("দয়া করে আপনার নাম লিখুন।");
-    return;
-  }
-
-  if (!phone) {
-    alert("দয়া করে আপনার মোবাইল নম্বর লিখুন।");
-    return;
-  }
-
-  if (!address) {
-    alert("দয়া করে আপনার ডেলিভারি ঠিকানা লিখুন।");
-    return;
-  }
-const selectedProducts =
-  products.filter(product => product.qty > 0);
-
-   const selectedProducts =
-    products.filter(product => product.qty > 0);
-
-const selectedProducts =
-  products.filter(product => product.qty > 0);
-  if (selectedProducts.length === 0) {
-    alert("দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।");
-    return;
-  }
-
-
-  let subtotal = 0;
-  let totalPieces = 0;
-  let orderText = "";
-
-
-  selectedProducts.forEach(product => {
-
-    const itemTotal =
-      product.price * product.qty;
-
-    subtotal += itemTotal;
-    totalPieces += product.qty;
-
-    orderText +=
-      `${product.name} × ${product.qty} = ৳${itemTotal}\n`;
-
-  });
-
-
-  const delivery =
-    totalPieces * deliveryPerPiece;
-
-  const total =
-    subtotal + delivery;
-
-
-  // Supabase-এ অর্ডারের পণ্যগুলোর তথ্য তৈরি
-  const orderItems = selectedProducts.map(product => ({
-    name: product.name,
-    quantity: product.qty,
-    price: product.price,
-    item_total: product.price * product.qty
-  }));
-
-
-  // Supabase-এ অর্ডার সংরক্ষণ
-  const { error } = await supabase
-    .from("orders")
-    .insert([{
-      customer_name: name,
-      customer_phone: phone,
-      customer_address: address,
-      order_items: orderItems,
-      subtotal: subtotal,
-      delivery_charge: delivery,
-      total: total,
-      status: "New"
-    }]);
-
-
-  // Supabase-এ সমস্যা হলে অর্ডার সম্পন্ন হয়েছে বলা হবে না
-  if (error) {
-
-    console.error("Supabase Error:", error);
-
-    alert(
-      "অর্ডার সংরক্ষণ করা যায়নি।\n\n" +
-      "দয়া করে আবার চেষ্টা করুন।"
-    );
-
-    return;
-  }
-
-
-  // WhatsApp message
-  const message =
+      const message =
 
 `🍴 *নাস্তা ভাই - নতুন অর্ডার*
 
@@ -1093,32 +950,31 @@ ${orderText}
 নাস্তা ভাই`;
 
 
-  const encodedMessage =
-    encodeURIComponent(message);
+      const encodedMessage =
+        encodeURIComponent(message);
 
 
-  const whatsappURL =
-    `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      const whatsappURL =
+        `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
 
-  window.open(
-    whatsappURL,
-    "_blank"
-  );
+      window.open(
+        whatsappURL,
+        "_blank"
+      );
 
-}
+    }
 
 
+    /* =================================
+       START WEBSITE
+    ================================= */
 
-  /*
-   * WEBSITE চালু হওয়ার সময়
-   */
+    renderMenu();
 
-  renderMenu();
+    updateSummary();
 
-  updateSummary();
-
-</script>
+  </script>
 
 </body>
 </html>
