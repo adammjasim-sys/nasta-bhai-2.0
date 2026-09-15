@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="bn">
+  <script>
+const supabaseUrl = "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
+const supabaseKey = "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
+
+const supabase = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
+</script>
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -949,103 +959,106 @@
    * WHATSAPP ORDER
    */
 
-  function sendOrder() {
+  async function sendOrder() {
 
-    const name =
-      document.getElementById(
-        "customerName"
-      ).value.trim();
+  const name =
+    document.getElementById("customerName").value.trim();
 
+  const phone =
+    document.getElementById("customerPhone").value.trim();
 
-    const phone =
-      document.getElementById(
-        "customerPhone"
-      ).value.trim();
+  const address =
+    document.getElementById("customerAddress").value.trim();
 
 
-    const address =
-      document.getElementById(
-        "customerAddress"
-      ).value.trim();
+  if (!name) {
+    alert("দয়া করে আপনার নাম লিখুন।");
+    return;
+  }
+
+  if (!phone) {
+    alert("দয়া করে আপনার মোবাইল নম্বর লিখুন।");
+    return;
+  }
+
+  if (!address) {
+    alert("দয়া করে আপনার ডেলিভারি ঠিকানা লিখুন।");
+    return;
+  }
 
 
-    if (!name) {
-
-      alert("দয়া করে আপনার নাম লিখুন।");
-
-      return;
-
-    }
+  if (selectedProducts.length === 0) {
+    alert("দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।");
+    return;
+  }
 
 
-    if (!phone) {
-
-      alert("দয়া করে আপনার মোবাইল নম্বর লিখুন।");
-
-      return;
-
-    }
+  let subtotal = 0;
+  let totalPieces = 0;
+  let orderText = "";
 
 
-    if (!address) {
+  selectedProducts.forEach(product => {
 
-      alert("দয়া করে আপনার ডেলিভারি ঠিকানা লিখুন।");
+    const itemTotal =
+      product.price * product.qty;
 
-      return;
+    subtotal += itemTotal;
+    totalPieces += product.qty;
 
-    }
+    orderText +=
+      `${product.name} × ${product.qty} = ৳${itemTotal}\n`;
 
-
-    const selectedProducts =
-      products.filter(
-        product => product.qty > 0
-      );
-
-
-    if (selectedProducts.length === 0) {
-
-      alert(
-        "দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।"
-      );
-
-      return;
-
-    }
+  });
 
 
-    let subtotal = 0;
+  const delivery =
+    totalPieces * deliveryPerPiece;
 
-    let totalPieces = 0;
-
-    let orderText = "";
-
-
-    selectedProducts.forEach(product => {
-
-      const itemTotal =
-        product.price * product.qty;
+  const total =
+    subtotal + delivery;
 
 
-      subtotal += itemTotal;
-
-      totalPieces += product.qty;
-
-
-      orderText +=
-        `${product.name} × ${product.qty} = ৳${itemTotal}\n`;
-
-    });
+  // Supabase-এ অর্ডারের পণ্যগুলোর তথ্য তৈরি
+  const orderItems = selectedProducts.map(product => ({
+    name: product.name,
+    quantity: product.qty,
+    price: product.price,
+    item_total: product.price * product.qty
+  }));
 
 
-    const delivery =
-      totalPieces * deliveryPerPiece;
+  // Supabase-এ অর্ডার সংরক্ষণ
+  const { error } = await supabase
+    .from("orders")
+    .insert([{
+      customer_name: name,
+      customer_phone: phone,
+      customer_address: address,
+      order_items: orderItems,
+      subtotal: subtotal,
+      delivery_charge: delivery,
+      total: total,
+      status: "New"
+    }]);
 
 
-    const total =
-      subtotal + delivery;
+  // Supabase-এ সমস্যা হলে অর্ডার সম্পন্ন হয়েছে বলা হবে না
+  if (error) {
+
+    console.error("Supabase Error:", error);
+
+    alert(
+      "অর্ডার সংরক্ষণ করা যায়নি।\n\n" +
+      "দয়া করে আবার চেষ্টা করুন।"
+    );
+
+    return;
+  }
 
 
-    const message =
+  // WhatsApp message
+  const message =
 
 `🍴 *নাস্তা ভাই - নতুন অর্ডার*
 
@@ -1068,20 +1081,21 @@ ${orderText}
 নাস্তা ভাই`;
 
 
-    const encodedMessage =
-      encodeURIComponent(message);
+  const encodedMessage =
+    encodeURIComponent(message);
 
 
-    const whatsappURL =
-      `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+  const whatsappURL =
+    `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
 
-    window.open(
-      whatsappURL,
-      "_blank"
-    );
+  window.open(
+    whatsappURL,
+    "_blank"
+  );
 
-  }
+}
+
 
 
   /*
