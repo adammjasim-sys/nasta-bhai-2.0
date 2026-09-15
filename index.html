@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="bn">
-  <script>
-const supabaseUrl = "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
-const supabaseKey = "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
 
-const supabase = window.supabase.createClient(
-  supabaseUrl,
-  supabaseKey
-);
-</script>
 <head>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const supabaseUrl = "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
+    const supabaseKey = "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
+
+    const supabase = window.supabase.createClient(
+      supabaseUrl,
+      supabaseKey
+    );
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -985,8 +991,14 @@ const supabase = window.supabase.createClient(
     alert("দয়া করে আপনার ডেলিভারি ঠিকানা লিখুন।");
     return;
   }
+const selectedProducts =
+  products.filter(product => product.qty > 0);
 
+   const selectedProducts =
+    products.filter(product => product.qty > 0);
 
+const selectedProducts =
+  products.filter(product => product.qty > 0);
   if (selectedProducts.length === 0) {
     alert("দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।");
     return;
