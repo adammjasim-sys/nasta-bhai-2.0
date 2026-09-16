@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>নাস্তা ভাই | Admin Order List</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    header {
+      background: #ff6b00;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 25px auto;
+    }
+
+    .topbar {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .topbar h2 {
+      margin: 0;
+    }
+
+    button {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .refresh {
+      background: #ff6b00;
+      color: white;
+    }
+
+    .logout {
+      background: #333;
+      color: white;
+    }
+
+    .orders {
+      display: grid;
+      gap: 18px;
+    }
+
+    .order {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .order-id {
+      font-weight: bold;
+      color: #ff6b00;
+    }
+
+    .customer {
+      line-height: 1.8;
+    }
+
+    .items {
+      background: #fff7f0;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      color: #e65100;
+    }
+
+    select {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 8px;
+    }
+
+    .empty {
+      background: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: 94%;
+      }
+
+      .order {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🍴 নাস্তা ভাই — Admin Order List</h1>
+</header>
+
+<div class="container">
+
+  <div class="topbar">
+    <h2>📋 কাস্টমার অর্ডার</h2>
+    <button class="refresh" onclick="loadOrders()">🔄 Refresh</button>
+  </div>
+
+  <div id="orders" class="orders">
+    <div class="empty">অর্ডার লোড হচ্ছে...</div>
+  </div>
+
+</div>
+
+<script>
+
+  // আপনার Supabase তথ্য
+  const supabaseUrl = "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
+
+  // এখানে আপনার আগের Publishable Key বসাবেন
+  const supabaseKey = "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      supabaseUrl,
+      supabaseKey
+    );
+
+
+  async function loadOrders() {
+
+    const ordersDiv = document.getElementById("orders");
+
+    ordersDiv.innerHTML =
+      '<div class="empty">অর্ডার লোড হচ্ছে...</div>';
+
+    const { data, error } = await supabaseClient
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+
+    if (error) {
+
+      console.error(error);
+
+      ordersDiv.innerHTML =
+        '<div class="empty">❌ অর্ডার লোড করা যাচ্ছে না।</div>';
+
+      return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+      ordersDiv.innerHTML =
+        '<div class="empty">এখনও কোনো অর্ডার নেই।</div>';
+
+      return;
+    }
+
+
+    ordersDiv.innerHTML = "";
+
+
+    data.forEach(order => {
+
+      let itemsHTML = "";
+
+      if (Array.isArray(order.order_items)) {
+
+        order.order_items.forEach(item => {
+
+          itemsHTML += `
+            <div>
+              ${item.icon || "🍴"}
+              ${item.name}
+              × ${item.qty}
+              = ৳${item.price * item.qty}
+            </div>
+          `;
+
+        });
+
+      }
+
+
+      const date =
+        new Date(order.created_at).toLocaleString("bn-BD");
+
+
+      const orderHTML = `
+
+        <div class="order">
+
+          <div class="order-header">
+
+            <div class="order-id">
+              Order #${order.id}
+            </div>
+
+            <div>
+              ${date}
+            </div>
+
+          </div>
+
+
+          <div class="customer">
+
+            <strong>👤 নাম:</strong>
+            ${order.customer_name}
+
+            <br>
+
+            <strong>📱 ফোন:</strong>
+            ${order.customer_phone}
+
+            <br>
+
+            <strong>📍 ঠিকানা:</strong>
+            ${order.customer_address}
+
+          </div>
+
+
+          <div class="items">
+
+            <strong>🛒 অর্ডার:</strong>
+
+            ${itemsHTML}
+
+          </div>
+
+
+          <div>
+
+            পণ্যের মূল্য:
+            ৳${order.subtotal}
+
+            <br>
+
+            ডেলিভারি:
+            ৳${order.delivery_charge}
+
+            <br><br>
+
+            <div class="total">
+              মোট:
+              ৳${order.total}
+            </div>
+
+          </div>
+
+
+          <div>
+
+            <strong>স্ট্যাটাস:</strong>
+
+            <br>
+
+            <select
+              onchange="updateStatus(${order.id}, this.value)"
+            >
+
+              <option value="New"
+                ${order.status === "New" ? "selected" : ""}>
+                🟢 New
+              </option>
+
+              <option value="Processing"
+                ${order.status === "Processing" ? "selected" : ""}>
+                🟡 Processing
+              </option>
+
+              <option value="Delivered"
+                ${order.status === "Delivered" ? "selected" : ""}>
+                🔵 Delivered
+              </option>
+
+              <option value="Cancelled"
+                ${order.status === "Cancelled" ? "selected" : ""}>
+                🔴 Cancelled
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      ordersDiv.innerHTML += orderHTML;
+
+    });
+
+  }
+
+
+
+  async function updateStatus(id, status) {
+
+    const { error } = await supabaseClient
+
+      .from("orders")
+
+      .update({ status: status })
+
+      .eq("id", id);
+
+
+    if (error) {
+
+      alert("স্ট্যাটাস পরিবর্তন করা যায়নি।");
+
+      console.error(error);
+
+      return;
+
+    }
+
+
+    alert("✅ স্ট্যাটাস পরিবর্তন হয়েছে।");
+
+  }
+
+
+  loadOrders();
+
+</script>
+
+</body>
+</html>
