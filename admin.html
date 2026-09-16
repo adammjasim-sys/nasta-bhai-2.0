@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>নাস্তা ভাই | Admin Order List</title>
+  <title>নাস্তা ভাই | Admin</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -36,6 +36,66 @@
       width: 95%;
       max-width: 1200px;
       margin: 25px auto;
+    }
+
+    /* LOGIN */
+    #loginBox {
+      max-width: 420px;
+      margin: 60px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+    }
+
+    #loginBox h2 {
+      text-align: center;
+      margin-top: 0;
+      color: #ff6b00;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 16px;
+    }
+
+    .login-btn {
+      width: 100%;
+      background: #ff6b00;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 7px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background: #e85d00;
+    }
+
+    #loginMessage {
+      color: red;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* ADMIN */
+    #adminPanel {
+      display: none;
     }
 
     .topbar {
@@ -145,29 +205,105 @@
 <body>
 
 <header>
-  <h1>🍴 নাস্তা ভাই — Admin Order List</h1>
+  <h1>🍴 নাস্তা ভাই — Admin Panel</h1>
 </header>
 
-<div class="container">
 
-  <div class="topbar">
-    <h2>📋 কাস্টমার অর্ডার</h2>
-    <button class="refresh" onclick="loadOrders()">🔄 Refresh</button>
+<!-- =========================
+     LOGIN SECTION
+========================= -->
+
+<div id="loginBox">
+
+  <h2>🔐 Admin Login</h2>
+
+  <div class="input-group">
+    <label>ইমেইল</label>
+    <input
+      type="email"
+      id="email"
+      placeholder="Admin Email"
+    >
   </div>
 
-  <div id="orders" class="orders">
-    <div class="empty">অর্ডার লোড হচ্ছে...</div>
+  <div class="input-group">
+    <label>পাসওয়ার্ড</label>
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+    >
+  </div>
+
+  <button
+    class="login-btn"
+    onclick="login()"
+  >
+    Login
+  </button>
+
+  <div id="loginMessage"></div>
+
+</div>
+
+
+<!-- =========================
+     ADMIN PANEL
+========================= -->
+
+<div id="adminPanel">
+
+  <div class="container">
+
+    <div class="topbar">
+
+      <h2>📋 কাস্টমার অর্ডার</h2>
+
+      <div>
+
+        <button
+          class="refresh"
+          onclick="loadOrders()"
+        >
+          🔄 Refresh
+        </button>
+
+        <button
+          class="logout"
+          onclick="logout()"
+        >
+          🚪 Logout
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div id="orders" class="orders">
+
+      <div class="empty">
+        অর্ডার লোড হচ্ছে...
+      </div>
+
+    </div>
+
   </div>
 
 </div>
 
+
 <script>
 
-  // আপনার Supabase তথ্য
-  const supabaseUrl = "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
+  /* =========================
+     SUPABASE CONFIG
+  ========================= */
 
-  // এখানে আপনার আগের Publishable Key বসাবেন
-  const supabaseKey = "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
+  const supabaseUrl =
+    "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
+
+  const supabaseKey =
+    "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
 
   const supabaseClient =
     window.supabase.createClient(
@@ -176,17 +312,149 @@
     );
 
 
+  /* =========================
+     CHECK LOGIN
+  ========================= */
+
+  async function checkLogin() {
+
+    const {
+      data: {
+        session
+      }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (session) {
+
+      showAdminPanel();
+
+    } else {
+
+      showLogin();
+
+    }
+
+  }
+
+
+  /* =========================
+     LOGIN
+  ========================= */
+
+  async function login() {
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+
+    const message =
+      document.getElementById("loginMessage");
+
+
+    message.innerText = "";
+
+
+    if (!email || !password) {
+
+      message.innerText =
+        "ইমেইল এবং পাসওয়ার্ড দিন।";
+
+      return;
+
+    }
+
+
+    const {
+      data,
+      error
+    } = await supabaseClient.auth.signInWithPassword({
+
+      email: email,
+
+      password: password
+
+    });
+
+
+    if (error) {
+
+      console.error(error);
+
+      message.innerText =
+        "❌ Login ব্যর্থ হয়েছে। Email অথবা Password সঠিক কিনা দেখুন।";
+
+      return;
+
+    }
+
+
+    showAdminPanel();
+
+  }
+
+
+  /* =========================
+     SHOW ADMIN PANEL
+  ========================= */
+
+  function showAdminPanel() {
+
+    document.getElementById("loginBox").style.display =
+      "none";
+
+    document.getElementById("adminPanel").style.display =
+      "block";
+
+    loadOrders();
+
+  }
+
+
+  /* =========================
+     SHOW LOGIN
+  ========================= */
+
+  function showLogin() {
+
+    document.getElementById("loginBox").style.display =
+      "block";
+
+    document.getElementById("adminPanel").style.display =
+      "none";
+
+  }
+
+
+  /* =========================
+     LOAD ORDERS
+  ========================= */
+
   async function loadOrders() {
 
-    const ordersDiv = document.getElementById("orders");
+    const ordersDiv =
+      document.getElementById("orders");
+
 
     ordersDiv.innerHTML =
       '<div class="empty">অর্ডার লোড হচ্ছে...</div>';
 
-    const { data, error } = await supabaseClient
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+
       .from("orders")
+
       .select("*")
-      .order("created_at", { ascending: false });
+
+      .order("created_at", {
+        ascending: false
+      });
 
 
     if (error) {
@@ -197,6 +465,7 @@
         '<div class="empty">❌ অর্ডার লোড করা যাচ্ছে না।</div>';
 
       return;
+
     }
 
 
@@ -206,6 +475,7 @@
         '<div class="empty">এখনও কোনো অর্ডার নেই।</div>';
 
       return;
+
     }
 
 
@@ -214,19 +484,23 @@
 
     data.forEach(order => {
 
+
       let itemsHTML = "";
+
 
       if (Array.isArray(order.order_items)) {
 
         order.order_items.forEach(item => {
 
           itemsHTML += `
+
             <div>
               ${item.icon || "🍴"}
               ${item.name}
               × ${item.qty}
               = ৳${item.price * item.qty}
             </div>
+
           `;
 
         });
@@ -235,7 +509,8 @@
 
 
       const date =
-        new Date(order.created_at).toLocaleString("bn-BD");
+        new Date(order.created_at)
+        .toLocaleString("bn-BD");
 
 
       const orderHTML = `
@@ -245,11 +520,15 @@
           <div class="order-header">
 
             <div class="order-id">
+
               Order #${order.id}
+
             </div>
 
             <div>
+
               ${date}
+
             </div>
 
           </div>
@@ -295,8 +574,10 @@
             <br><br>
 
             <div class="total">
+
               মোট:
               ৳${order.total}
+
             </div>
 
           </div>
@@ -308,27 +589,39 @@
 
             <br>
 
+
             <select
               onchange="updateStatus(${order.id}, this.value)"
             >
 
-              <option value="New"
-                ${order.status === "New" ? "selected" : ""}>
+              <option
+                value="New"
+                ${order.status === "New" ? "selected" : ""}
+              >
                 🟢 New
               </option>
 
-              <option value="Processing"
-                ${order.status === "Processing" ? "selected" : ""}>
+
+              <option
+                value="Processing"
+                ${order.status === "Processing" ? "selected" : ""}
+              >
                 🟡 Processing
               </option>
 
-              <option value="Delivered"
-                ${order.status === "Delivered" ? "selected" : ""}>
+
+              <option
+                value="Delivered"
+                ${order.status === "Delivered" ? "selected" : ""}
+              >
                 🔵 Delivered
               </option>
 
-              <option value="Cancelled"
-                ${order.status === "Cancelled" ? "selected" : ""}>
+
+              <option
+                value="Cancelled"
+                ${order.status === "Cancelled" ? "selected" : ""}
+              >
                 🔴 Cancelled
               </option>
 
@@ -348,35 +641,63 @@
   }
 
 
+  /* =========================
+     UPDATE STATUS
+  ========================= */
 
   async function updateStatus(id, status) {
 
-    const { error } = await supabaseClient
+    const {
+      error
+    } = await supabaseClient
 
       .from("orders")
 
-      .update({ status: status })
+      .update({
+        status: status
+      })
 
       .eq("id", id);
 
 
     if (error) {
 
-      alert("স্ট্যাটাস পরিবর্তন করা যায়নি।");
-
       console.error(error);
+
+      alert(
+        "❌ স্ট্যাটাস পরিবর্তন করা যায়নি।"
+      );
 
       return;
 
     }
 
 
-    alert("✅ স্ট্যাটাস পরিবর্তন হয়েছে।");
+    alert(
+      "✅ স্ট্যাটাস পরিবর্তন হয়েছে।"
+    );
 
   }
 
 
-  loadOrders();
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    showLogin();
+
+  }
+
+
+  /* =========================
+     START
+  ========================= */
+
+  checkLogin();
 
 </script>
 
