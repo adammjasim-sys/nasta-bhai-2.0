@@ -279,7 +279,19 @@
 
     </div>
 
+<div id="dashboard" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:20px;">
 
+  <div style="flex:1; min-width:180px; background:#f1f5f9; padding:15px; border-radius:10px;">
+    <strong>📦 মোট অর্ডার</strong>
+    <div id="totalOrders" style="font-size:24px; font-weight:bold; margin-top:5px;">0</div>
+  </div>
+
+  <div style="flex:1; min-width:180px; background:#f1f5f9; padding:15px; border-radius:10px;">
+    <strong>💰 মোট বিক্রি</strong>
+    <div id="totalSales" style="font-size:24px; font-weight:bold; margin-top:5px;">৳0</div>
+  </div>
+
+</div>
     <div id="orders" class="orders">
 
       <div class="empty">
@@ -455,7 +467,17 @@
       .order("created_at", {
         ascending: false
       });
+// Dashboard হিসাব
+const totalOrders = data ? data.length : 0;
 
+const totalSales = data
+  ? data.reduce((sum, order) => sum + Number(order.total || 0), 0)
+  : 0;
+
+document.getElementById("totalOrders").textContent = totalOrders;
+
+document.getElementById("totalSales").textContent =
+  "৳" + totalSales;
 
     if (error) {
 
