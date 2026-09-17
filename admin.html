@@ -542,12 +542,29 @@ ${item.name}
             <br>
 
             <strong>📱 ফোন:</strong>
-            ${order.customer_phone}
+${order.customer_phone}
 
-            <br>
+<br>
 
-            <strong>📍 ঠিকানা:</strong>
-            ${order.customer_address}
+<a
+  href="tel:${order.customer_phone}"
+  style="display:inline-block; margin:6px 4px 6px 0; padding:8px 12px; background:#198754; color:white; text-decoration:none; border-radius:6px;"
+>
+  📞 Call
+</a>
+
+<a
+  href="https://wa.me/88${order.customer_phone.replace(/^0/, '')}"
+  target="_blank"
+  style="display:inline-block; margin:6px 0; padding:8px 12px; background:#25D366; color:white; text-decoration:none; border-radius:6px;"
+>
+  💬 WhatsApp
+</a>
+
+<br>
+
+<strong>📍 ঠিকানা:</strong>
+${order.customer_address}
 
           </div>
 
