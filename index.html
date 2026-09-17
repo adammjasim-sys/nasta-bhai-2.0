@@ -880,28 +880,18 @@
          SAVE TO SUPABASE
       ================================= */
 
-      const { error } =
-        await supabaseClient
-          .from("orders")
-          .insert([{
-
-            customer_name: name,
-
-            customer_phone: phone,
-
-            customer_address: address,
-
-            order_items: orderItems,
-
-            subtotal: subtotal,
-
-            delivery_charge: delivery,
-
-            total: total,
-
-            status: "New"
-
-          }]);
+      const { error } = await supabaseClient
+  .from("orders")
+  .insert([{
+    customer_name: name,
+    customer_phone: phone,
+    customer_address: address,
+    order_items: orderItems,
+    subtotal: subtotal,
+    delivery_charge: delivery,
+    total: total,
+    status: "New"
+  }]);
 
 
       if (error) {
