@@ -619,12 +619,19 @@ ${order.customer_address}
               </option>
 
 
-              <option
-                value="Processing"
-                ${order.status === "Processing" ? "selected" : ""}
-              >
-                🟡 Processing
-              </option>
+             <option
+  value="Confirmed"
+  ${order.status === "Confirmed" ? "selected" : ""}
+>
+  🟡 Confirmed
+</option>
+
+<option
+  value="Preparing"
+  ${order.status === "Preparing" ? "selected" : ""}
+>
+  🟠 Preparing
+</option>
 
 
               <option
