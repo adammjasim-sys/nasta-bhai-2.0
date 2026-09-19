@@ -511,12 +511,13 @@
     const products = [
 
       {
-        id: 1,
-        name: "সিঙ্গারা",
-        price: 10,
-        icon: "🥟",
-        qty: 0
-      },
+  id: 1,
+  name: "সিঙ্গারা",
+  price: 10,
+  icon: "🥟",
+  image: "singara.jpg.jpg",
+  qty: 0
+},
 
       {
         id: 2,
@@ -579,8 +580,12 @@
         card.innerHTML = `
 
           <div class="product-icon">
-            ${product.icon}
-          </div>
+  <img
+    src="${product.image}"
+    alt="${product.name}"
+    style="width:100%; height:150px; object-fit:cover; border-radius:10px;"
+  >
+</div>
 
           <h3>
             ${product.name}
