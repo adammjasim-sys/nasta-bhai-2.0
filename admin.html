@@ -624,67 +624,48 @@ ${order.customer_address}
 
           <div>
 
-            <strong>স্ট্যাটাস:</strong>
+           <strong>স্ট্যাটাস:</strong>
 
-            <br>
+<br>
 
+<div style="margin-top:8px;">
 
-            <select
-              onchange="updateStatus(${order.id}, this.value)"
-            >
+${
+order.status === "New"
+? `<button onclick="updateStatus(${order.id}, 'Confirmed')">
+          ✅ Confirm Order         </button>`
+: order.status === "Confirmed"
+? `<button onclick="updateStatus(${order.id}, 'Preparing')">
+          🍳 Start Preparing         </button>`
+: order.status === "Preparing"
+? `<button onclick="updateStatus(${order.id}, 'Delivered')">
+          🚚 Mark Delivered         </button>`
+: order.status === "Delivered"
+? `<span style="color:green; font-weight:bold;">
+          ✅ Completed         </span>`
+: order.status === "Cancelled"
+? `<span style="color:red; font-weight:bold;">
+          ❌ Cancelled         </span>`
+: ""
+}
 
-              <option
-                value="New"
-                ${order.status === "New" ? "selected" : ""}
-              >
-                🟢 New
-              </option>
+</div>
 
+${
+order.status !== "Delivered" &&
+order.status !== "Cancelled"
+? `<button
+         onclick="updateStatus(${order.id}, 'Cancelled')"
+         style="margin-top:6px;"        >
+         ❌ Cancel Order        </button>`
+: ""
+}
 
-             <option
-  value="Confirmed"
-  ${order.status === "Confirmed" ? "selected" : ""}
->
-  🟡 Confirmed
-</option>
+</div>
 
-<option
-  value="Preparing"
-  ${order.status === "Preparing" ? "selected" : ""}
->
-  🟠 Preparing
-</option>
+</div>
 
-
-              <option
-                value="Delivered"
-                ${order.status === "Delivered" ? "selected" : ""}
-              >
-                🔵 Delivered
-              </option>
-
-
-              <option
-                value="Cancelled"
-                ${order.status === "Cancelled" ? "selected" : ""}
-              >
-                🔴 Cancelled
-              </option>
-
-            </select>
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      ordersDiv.innerHTML += orderHTML;
-
-    });
-
-  }
+`;
 
 
   /* =========================
@@ -722,7 +703,7 @@ ${order.customer_address}
     alert(
       "✅ স্ট্যাটাস পরিবর্তন হয়েছে।"
     );
-
+loadOrders();
   }
 
 
