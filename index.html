@@ -394,7 +394,37 @@
         ></textarea>
 
       </div>
+<div class="form-group">
 
+  <label for="paymentMethod">
+    💳 পেমেন্ট পদ্ধতি
+  </label>
+
+  <select id="paymentMethod">
+    <option value="COD">💵 Cash on Delivery</option>
+    <option value="bKash Manual">📱 bKash Manual</option>
+  </select>
+
+</div>
+
+<div class="form-group" id="bkashPaymentBox" style="display: none;">
+
+  <p>
+    📱 bKash নম্বর:
+    <strong>01739517773</strong>
+  </p>
+
+  <label for="transactionId">
+    🧾 Transaction ID
+  </label>
+
+  <input
+    type="text"
+    id="transactionId"
+    placeholder="bKash Transaction ID লিখুন"
+  >
+
+</div>
 
       <!-- SUMMARY -->
 
@@ -898,7 +928,21 @@
          SAVE TO SUPABASE
       ================================= */
 
-      const { error } = await supabaseClient
+   const paymentMethod = document.getElementById("paymentMethod").value;
+      const transactionId = document.getElementById("transactionId").value.trim();
+
+if (paymentMethod === "bKash Manual" && transactionId === "") {
+  alert("দয়া করে bKash Transaction ID লিখুন।");
+  return;
+}
+
+let paymentStatus = "Unpaid";
+
+if (paymentMethod === "bKash Manual") {
+  paymentStatus = "Pending";
+}
+
+const { error } = await supabaseClient
   .from("orders")
   .insert([{
     customer_name: name,
@@ -908,7 +952,10 @@
     subtotal: subtotal,
     delivery_charge: delivery,
     total: total,
-    status: "New"
+    status: "New",
+    payment_method: paymentMethod,
+    payment_status: paymentStatus,
+    transaction_id: transactionId
   }]);
 
 
@@ -980,7 +1027,16 @@ ${orderText}
     renderMenu();
 
     updateSummary();
+const paymentMethodSelect = document.getElementById("paymentMethod");
+const bkashPaymentBox = document.getElementById("bkashPaymentBox");
 
+paymentMethodSelect.addEventListener("change", function () {
+  if (this.value === "bKash Manual") {
+    bkashPaymentBox.style.display = "block";
+  } else {
+    bkashPaymentBox.style.display = "none";
+  }
+});
   </script>
 
 </body>
