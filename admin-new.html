@@ -1,0 +1,765 @@
+```html
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>নাস্তা ভাই | Admin Panel</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+.container {
+    width: 95%;
+    max-width: 1100px;
+    margin: 20px auto;
+}
+
+.header {
+    background: #198754;
+    color: white;
+    padding: 18px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header p {
+    margin: 6px 0 0;
+}
+
+.login-box,
+.dashboard,
+.orders-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.login-box {
+    max-width: 450px;
+    margin: 40px auto;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button {
+    border: none;
+    border-radius: 7px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 3px;
+}
+
+.login-btn {
+    width: 100%;
+    background: #198754;
+    color: white;
+    font-size: 16px;
+    padding: 12px;
+}
+
+.logout-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.dashboard-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.dashboard-card h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+}
+
+.dashboard-card strong {
+    font-size: 24px;
+}
+
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 15px;
+    background: #fff;
+}
+
+.order-card h3 {
+    margin-top: 0;
+    color: #198754;
+}
+
+.order-items {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.status-new {
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+.status-confirmed {
+    color: #198754;
+    font-weight: bold;
+}
+
+.status-preparing {
+    color: #fd7e14;
+    font-weight: bold;
+}
+
+.status-delivered {
+    color: #198754;
+    font-weight: bold;
+}
+
+.status-cancelled {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.confirm-btn {
+    background: #198754;
+    color: white;
+}
+
+.prepare-btn {
+    background: #fd7e14;
+    color: white;
+}
+
+.delivered-btn {
+    background: #0d6efd;
+    color: white;
+}
+
+.cancel-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+.error {
+    color: #dc3545;
+    margin-top: 10px;
+}
+
+.success {
+    color: #198754;
+    margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .container {
+        width: 94%;
+    }
+
+    .order-card {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🍴 নাস্তা ভাই 2.0</h1>
+        <p>Admin Panel</p>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginBox" class="login-box">
+
+        <h2>🔐 Admin Login</h2>
+
+        <div class="input-group">
+            <label>ইমেইল</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="Admin Email"
+            >
+        </div>
+
+        <div class="input-group">
+            <label>পাসওয়ার্ড</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+            >
+        </div>
+
+        <button class="login-btn" onclick="login()">
+            Login
+        </button>
+
+        <div id="loginMessage"></div>
+
+    </div>
+
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="hidden">
+
+        <div style="text-align:right; margin-bottom:15px;">
+            <button class="logout-btn" onclick="logout()">
+                Logout
+            </button>
+        </div>
+
+
+        <!-- DASHBOARD -->
+        <div class="dashboard">
+
+            <div class="dashboard-card">
+                <h3>📦 Total Orders</h3>
+                <strong id="totalOrders">0</strong>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>💰 Total Sales</h3>
+                <strong>৳<span id="totalSales">0</span></strong>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>📅 Today's Orders</h3>
+                <strong id="todayOrders">0</strong>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>💵 Today's Sales</h3>
+                <strong>৳<span id="todaySales">0</span></strong>
+            </div>
+
+        </div>
+
+
+        <!-- ORDERS -->
+        <div class="orders-box">
+
+            <h2>📦 Customer Orders</h2>
+
+            <div id="ordersDiv">
+                Loading orders...
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================
+   SUPABASE CONFIG
+========================= */
+
+const SUPABASE_URL = "https://jsahlgjtqrgzeuvvvtdw.supabase.co";
+
+const SUPABASE_ANON_KEY = "sb_publishable_kfWQ7IrqJr-WRpBafu8S8Q_qRpT5exw";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login() {
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const message =
+        document.getElementById("loginMessage");
+
+    if (!email || !password) {
+
+        message.className = "error";
+
+        message.innerText =
+            "ইমেইল এবং পাসওয়ার্ড দিন।";
+
+        return;
+    }
+
+    const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+    if (error) {
+
+        message.className = "error";
+
+        message.innerText =
+            error.message;
+
+        return;
+    }
+
+    message.className = "success";
+
+    message.innerText =
+        "Login successful!";
+
+    showAdminPanel();
+
+}
+
+
+/* =========================
+   SHOW ADMIN PANEL
+========================= */
+
+function showAdminPanel() {
+
+    document.getElementById("loginBox")
+        .classList.add("hidden");
+
+    document.getElementById("adminPanel")
+        .classList.remove("hidden");
+
+    loadOrders();
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    document.getElementById("adminPanel")
+        .classList.add("hidden");
+
+    document.getElementById("loginBox")
+        .classList.remove("hidden");
+
+}
+
+
+/* =========================
+   LOAD ORDERS
+========================= */
+
+async function loadOrders() {
+
+    const ordersDiv =
+        document.getElementById("ordersDiv");
+
+    ordersDiv.innerHTML =
+        "Loading orders...";
+
+    const { data: orders, error } =
+        await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", {
+            ascending: false
+        });
+
+    if (error) {
+
+        ordersDiv.innerHTML =
+            `<p class="error">
+                ${error.message}
+            </p>`;
+
+        return;
+    }
+
+    if (!orders || orders.length === 0) {
+
+        ordersDiv.innerHTML =
+            "<p>কোনো অর্ডার পাওয়া যায়নি।</p>";
+
+        updateDashboard([]);
+
+        return;
+    }
+
+    updateDashboard(orders);
+
+    ordersDiv.innerHTML = "";
+
+    orders.forEach(order => {
+
+        let orderItems = [];
+
+        try {
+
+            orderItems =
+                typeof order.order_items === "string"
+                ? JSON.parse(order.order_items)
+                : order.order_items;
+
+        } catch (e) {
+
+            orderItems = [];
+
+        }
+
+
+        const orderHTML = `
+
+        <div class="order-card">
+
+            <h3>
+                🧾 Order #${order.id}
+            </h3>
+
+            <p>
+                <strong>👤 নাম:</strong>
+                ${order.customer_name || ""}
+            </p>
+
+            <p>
+                <strong>📱 মোবাইল:</strong>
+                ${order.customer_phone || ""}
+            </p>
+
+            <p>
+                <strong>📍 ঠিকানা:</strong>
+                ${order.customer_address || ""}
+            </p>
+
+            <div class="order-items">
+
+                <strong>🛒 অর্ডারের তালিকা:</strong>
+
+                ${
+                    orderItems.length
+                    ? orderItems.map(item => `
+
+                        <div style="margin-top:6px;">
+
+                            ${item.name || "পণ্য"}
+
+                            ×
+
+                            ${item.quantity ?? item.qty ?? 0}
+
+                            =
+
+                            ৳${
+                                item.item_total ??
+                                (
+                                    (item.price || 0) *
+                                    (item.quantity ?? item.qty ?? 0)
+                                )
+                            }
+
+                        </div>
+
+                    `).join("")
+                    : "<div>অর্ডারের তথ্য পাওয়া যায়নি</div>"
+                }
+
+            </div>
+
+
+            <p>
+                💰 পণ্যের মূল্য:
+                ৳${order.subtotal || 0}
+            </p>
+
+            <p>
+                🚚 ডেলিভারি চার্জ:
+                ৳${order.delivery_charge || 0}
+            </p>
+
+            <p>
+                <strong>
+                    💵 সর্বমোট:
+                    ৳${order.total || 0}
+                </strong>
+            </p>
+
+
+            <p>
+                <strong>স্ট্যাটাস:</strong>
+
+                ${
+                    order.status === "New"
+                    ? `<span class="status-new">New</span>`
+                    : order.status === "Confirmed"
+                    ? `<span class="status-confirmed">Confirmed</span>`
+                    : order.status === "Preparing"
+                    ? `<span class="status-preparing">Preparing</span>`
+                    : order.status === "Delivered"
+                    ? `<span class="status-delivered">Delivered</span>`
+                    : order.status === "Cancelled"
+                    ? `<span class="status-cancelled">Cancelled</span>`
+                    : `<span>${order.status || "New"}</span>`
+                }
+
+            </p>
+
+
+            <div style="margin-top:10px;">
+
+                ${
+                    order.status === "New"
+                    ? `
+                    <button
+                        class="confirm-btn"
+                        onclick="updateStatus(${order.id}, 'Confirmed')">
+                        ✅ Confirm Order
+                    </button>
+                    `
+                    : ""
+                }
+
+
+                ${
+                    order.status === "Confirmed"
+                    ? `
+                    <button
+                        class="prepare-btn"
+                        onclick="updateStatus(${order.id}, 'Preparing')">
+                        🍳 Start Preparing
+                    </button>
+                    `
+                    : ""
+                }
+
+
+                ${
+                    order.status === "Preparing"
+                    ? `
+                    <button
+                        class="delivered-btn"
+                        onclick="updateStatus(${order.id}, 'Delivered')">
+                        🚚 Mark Delivered
+                    </button>
+                    `
+                    : ""
+                }
+
+
+                ${
+                    order.status !== "Delivered" &&
+                    order.status !== "Cancelled"
+                    ? `
+                    <button
+                        class="cancel-btn"
+                        onclick="updateStatus(${order.id}, 'Cancelled')">
+                        ❌ Cancel Order
+                    </button>
+                    `
+                    : ""
+                }
+
+            </div>
+
+        </div>
+
+        `;
+
+        ordersDiv.innerHTML += orderHTML;
+
+    });
+
+}
+
+
+/* =========================
+   UPDATE STATUS
+========================= */
+
+async function updateStatus(orderId, newStatus) {
+
+    const { error } =
+        await supabaseClient
+        .from("orders")
+        .update({
+            status: newStatus
+        })
+        .eq("id", orderId);
+
+    if (error) {
+
+        alert(
+            "Status update failed: " +
+            error.message
+        );
+
+        return;
+    }
+
+    loadOrders();
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard(orders) {
+
+    const totalOrders =
+        orders.length;
+
+    const totalSales =
+        orders.reduce(
+            (sum, order) =>
+                sum + Number(order.total || 0),
+            0
+        );
+
+    const today =
+        new Date().toISOString().split("T")[0];
+
+    const todayOrders =
+        orders.filter(order =>
+            order.created_at &&
+            order.created_at.startsWith(today)
+        );
+
+    const todaySales =
+        todayOrders.reduce(
+            (sum, order) =>
+                sum + Number(order.total || 0),
+            0
+        );
+
+
+    document.getElementById("totalOrders")
+        .innerText = totalOrders;
+
+    document.getElementById("totalSales")
+        .innerText = totalSales;
+
+    document.getElementById("todayOrders")
+        .innerText = todayOrders.length;
+
+    document.getElementById("todaySales")
+        .innerText = todaySales;
+
+}
+
+
+/* =========================
+   AUTO REFRESH
+========================= */
+
+setInterval(() => {
+
+    const adminPanel =
+        document.getElementById("adminPanel");
+
+    if (
+        adminPanel &&
+        !adminPanel.classList.contains("hidden")
+    ) {
+
+        loadOrders();
+
+    }
+
+}, 15000);
+
+
+/* =========================
+   CHECK SESSION
+========================= */
+
+async function checkSession() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+    if (session) {
+
+        showAdminPanel();
+
+    }
+
+}
+
+checkSession();
+
+</script>
+
+</body>
+</html>
+```
