@@ -589,10 +589,61 @@ async function loadOrders() {
                 ${order.payment_method || "Not specified"}
             </p>
 
-            <p>
-                <strong>💰 Payment Status:</strong>
-                ${order.payment_status || "Pending"}
-            </p>
+           <p>
+    <strong>💰 Payment Status:</strong>
+    <span id="payment-status-${order.id}">
+        ${order.payment_status || "Pending"}
+    </span>
+</p>
+
+<div style="margin:8px 0;">
+
+    <button
+        onclick="updatePaymentStatus(${order.id}, 'Pending')"
+        style="
+            background:#ffc107;
+            color:#000;
+            border:none;
+            padding:8px 12px;
+            border-radius:6px;
+            margin:3px;
+            cursor:pointer;
+        "
+    >
+        ⏳ Pending
+    </button>
+
+    <button
+        onclick="updatePaymentStatus(${order.id}, 'Paid')"
+        style="
+            background:#198754;
+            color:white;
+            border:none;
+            padding:8px 12px;
+            border-radius:6px;
+            margin:3px;
+            cursor:pointer;
+        "
+    >
+        ✅ Paid
+    </button>
+
+    <button
+        onclick="updatePaymentStatus(${order.id}, 'Failed')"
+        style="
+            background:#dc3545;
+            color:white;
+            border:none;
+            padding:8px 12px;
+            border-radius:6px;
+            margin:3px;
+            cursor:pointer;
+        "
+    >
+        ❌ Failed
+    </button>
+
+</div>
 
             ${
                 order.transaction_id
@@ -695,7 +746,24 @@ async function loadOrders() {
 /* =========================
    UPDATE STATUS
 ========================= */
+async function updatePaymentStatus(orderId, newPaymentStatus) {
 
+    const { error } = await supabaseClient
+        .from("orders")
+        .update({
+            payment_status: newPaymentStatus
+        })
+        .eq("id", orderId);
+
+    if (error) {
+        alert("Payment Status update failed: " + error.message);
+        return;
+    }
+
+    alert("Payment Status updated: " + newPaymentStatus);
+
+    loadOrders();
+}
 async function updateStatus(orderId, newStatus) {
 
     const { error } =
