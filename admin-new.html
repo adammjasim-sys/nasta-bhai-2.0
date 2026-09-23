@@ -492,7 +492,42 @@ async function loadOrders() {
                 <strong>📱 মোবাইল:</strong>
                 ${order.customer_phone || ""}
             </p>
+<div style="margin:10px 0;">
 
+    <a
+        href="tel:${order.customer_phone || ""}"
+        style="
+            display:inline-block;
+            background:#198754;
+            color:white;
+            padding:9px 14px;
+            border-radius:7px;
+            text-decoration:none;
+            margin:3px;
+        "
+    >
+        📞 Call Customer
+    </a>
+
+    <a
+        href="https://wa.me/${String(order.customer_phone || "")
+            .replace(/\D/g, "")
+            .replace(/^0/, "880")}"
+        target="_blank"
+        style="
+            display:inline-block;
+            background:#25D366;
+            color:white;
+            padding:9px 14px;
+            border-radius:7px;
+            text-decoration:none;
+            margin:3px;
+        "
+    >
+        💬 WhatsApp
+    </a>
+
+</div>
             <p>
                 <strong>📍 ঠিকানা:</strong>
                 ${order.customer_address || ""}
@@ -549,7 +584,26 @@ async function loadOrders() {
                     ৳${order.total || 0}
                 </strong>
             </p>
+            <p>
+                <strong>💳 Payment Method:</strong>
+                ${order.payment_method || "Not specified"}
+            </p>
 
+            <p>
+                <strong>💰 Payment Status:</strong>
+                ${order.payment_status || "Pending"}
+            </p>
+
+            ${
+                order.transaction_id
+                ? `
+                <p>
+                    <strong>🧾 Transaction ID:</strong>
+                    ${order.transaction_id}
+                </p>
+                `
+                : ""
+            }
 
             <p>
                 <strong>স্ট্যাটাস:</strong>
