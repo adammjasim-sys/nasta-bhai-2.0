@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -325,7 +325,28 @@ button {
         <div class="orders-box">
 
             <h2>📦 Customer Orders</h2>
+<!-- Search Box -->
+<div style="margin:20px 0;">
 
+    <input
+        type="text"
+        id="orderSearch"
+        placeholder="🔍 নাম বা মোবাইল নম্বর দিয়ে অর্ডার খুঁজুন..."
+        oninput="searchOrders()"
+        style="
+            width:100%;
+            max-width:500px;
+            padding:12px;
+            font-size:16px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            box-sizing:border-box;
+        "
+    >
+
+</div>
+
+<div id="ordersDiv">
             <div id="ordersDiv">
                 Loading orders...
             </div>
@@ -443,7 +464,30 @@ async function logout() {
 /* =========================
    LOAD ORDERS
 ========================= */
+function searchOrders() {
 
+    const searchText =
+        document.getElementById("orderSearch").value
+        .toLowerCase()
+        .trim();
+
+    const orderCards =
+        document.querySelectorAll("#ordersDiv > div");
+
+    orderCards.forEach(card => {
+
+        const cardText =
+            card.innerText.toLowerCase();
+
+        if (cardText.includes(searchText)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+
+    });
+
+}
 async function loadOrders() {
 
     const ordersDiv =
