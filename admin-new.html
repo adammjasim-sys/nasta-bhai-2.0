@@ -141,14 +141,41 @@ button {
     margin: 10px 0;
 }
 
+.status-new,
+.status-confirmed,
+.status-preparing,
+.status-delivered,
+.status-cancelled {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
 .status-new {
     color: #0d6efd;
-    font-weight: bold;
+    background: #e7f1ff;
 }
 
 .status-confirmed {
     color: #198754;
-    font-weight: bold;
+    background: #d1e7dd;
+}
+
+.status-preparing {
+    color: #856404;
+    background: #fff3cd;
+}
+
+.status-delivered {
+    color: #155724;
+    background: #d4edda;
+}
+
+.status-cancelled {
+    color: #721c24;
+    background: #f8d7da;
 }
 
 .status-preparing {
