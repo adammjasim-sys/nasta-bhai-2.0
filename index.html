@@ -942,21 +942,32 @@ if (paymentMethod === "bKash Manual") {
   paymentStatus = "Pending";
 }
 
-const { error } = await supabaseClient
-  .from("orders")
-  .insert([{
-    customer_name: name,
-    customer_phone: phone,
-    customer_address: address,
-    order_items: orderItems,
-    subtotal: subtotal,
-    delivery_charge: delivery,
-    total: total,
-    status: "New",
-    payment_method: paymentMethod,
-    payment_status: paymentStatus,
-    transaction_id: transactionId
-  }]);
+const { data: orderData, error } = await supabaseClient
+    .from("orders")
+    .insert([{
+        customer_name: name,
+        customer_phone: phone,
+        customer_address: address,
+        order_items: orderItems,
+        subtotal: subtotal,
+        delivery_charge: delivery,
+        total: total,
+        status: "New",
+        payment_method: paymentMethod,
+        payment_status: paymentStatus,
+        transaction_id: transactionId
+    }])
+    .select()
+    .single();
+
+if (error) {
+    alert("অর্ডার সংরক্ষণ করা যায়নি: " + error.message);
+    return;
+}
+
+const orderId = orderData.id;
+
+alert("অর্ডার সফলভাবে গ্রহণ করা হয়েছে!\n\nআপনার Order ID: #" + orderId);
 
 
       if (error) {
