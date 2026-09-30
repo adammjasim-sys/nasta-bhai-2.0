@@ -1038,15 +1038,118 @@ ${orderText}
     renderMenu();
 
     updateSummary();
+async function trackOrder() {
+
+    const orderId =
+        document.getElementById("trackOrderId").value.trim();
+
+    const resultBox =
+        document.getElementById("trackingResult");
+
+    if (!orderId) {
+
+        resultBox.innerHTML = `
+            <p style="color:#dc3545;">
+                ⚠️ দয়া করে Order ID লিখুন।
+            </p>
+        `;
+
+        return;
+    }
+
+    resultBox.innerHTML = `
+        <p style="text-align:center;">
+            ⏳ অর্ডারের তথ্য খোঁজা হচ্ছে...
+        </p>
+    `;
+
+    const { data: order, error } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .eq("id", orderId)
+        .single();
+
+    if (error || !order) {
+
+        resultBox.innerHTML = `
+            <div style="
+                padding:15px;
+                background:#f8d7da;
+                color:#721c24;
+                border-radius:8px;
+                text-align:center;
+            ">
+                ❌ এই Order ID পাওয়া যায়নি।
+            </div>
+        `;
+
+        return;
+    }
+
+    resultBox.innerHTML = `
+        <div style="
+            padding:18px;
+            background:white;
+            border-radius:10px;
+            border:1px solid #ddd;
+        ">
+
+            <h3 style="margin-top:0;">
+                🧾 Order #${order.id}
+            </h3>
+
+            <p>
+                <strong>👤 নাম:</strong>
+                ${order.customer_name}
+            </p>
+
+            <p>
+                <strong>💰 মোট:</strong>
+                ৳${order.total}
+            </p>
+
+            <p>
+                <strong>💳 Payment:</strong>
+                ${
+                    order.payment_status === "Paid"
+                    ? `<span style="
+                        color:#198754;
+                        font-weight:bold;
+                    ">✅ Paid</span>`
+                    : `<span style="
+                        color:#856404;
+                        font-weight:bold;
+                    ">⏳ ${order.payment_status || "Pending"}</span>`
+                }
+            </p>
+
+            <p>
+                <strong>📦 Order Status:</strong>
+                <span style="font-weight:bold;">
+                    ${order.status || "New"}
+                </span>
+            </p>
+
+        </div>
+    `;
+}
+
 const paymentMethodSelect = document.getElementById("paymentMethod");
+
 const bkashPaymentBox = document.getElementById("bkashPaymentBox");
 
 paymentMethodSelect.addEventListener("change", function () {
-  if (this.value === "bKash Manual") {
-    bkashPaymentBox.style.display = "block";
-  } else {
-    bkashPaymentBox.style.display = "none";
-  }
+
+    if (this.value === "bKash Manual") {
+
+        bkashPaymentBox.style.display = "block";
+
+    } else {
+
+        bkashPaymentBox.style.display = "none";
+
+    }
+
 });
   </script>
 <!-- Order Tracking -->
