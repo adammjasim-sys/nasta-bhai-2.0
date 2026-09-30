@@ -1049,6 +1049,63 @@ paymentMethodSelect.addEventListener("change", function () {
   }
 });
   </script>
+<!-- Order Tracking -->
+<div
+    id="orderTrackingBox"
+    style="
+        max-width:500px;
+        margin:30px auto;
+        padding:20px;
+        background:#f8f9fa;
+        border-radius:12px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.10);
+    "
+>
 
+    <h2 style="text-align:center;">
+        🔎 অর্ডার ট্র্যাক করুন
+    </h2>
+
+    <p style="text-align:center;">
+        আপনার Order ID লিখে অর্ডারের অবস্থা দেখুন
+    </p>
+
+    <input
+        type="number"
+        id="trackOrderId"
+        placeholder="যেমন: 13"
+        style="
+            width:100%;
+            padding:12px;
+            font-size:16px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            box-sizing:border-box;
+            margin-bottom:10px;
+        "
+    >
+
+    <button
+        onclick="trackOrder()"
+        style="
+            width:100%;
+            padding:12px;
+            background:#198754;
+            color:white;
+            border:none;
+            border-radius:8px;
+            font-size:16px;
+            cursor:pointer;
+        "
+    >
+        🔎 অর্ডার দেখুন
+    </button>
+
+    <div
+        id="trackingResult"
+        style="margin-top:20px;"
+    ></div>
+
+</div>
 </body>
 </html>
