@@ -1155,20 +1155,44 @@ async function trackOrder() {
     <strong>💵 সর্বমোট:</strong>
     <strong>৳${order.total}</strong>
 </p>
-            <p>
-                <strong>💳 Payment:</strong>
-                ${
-                    order.payment_status === "Paid"
-                    ? `<span style="
-                        color:#198754;
-                        font-weight:bold;
-                    ">✅ Paid</span>`
-                    : `<span style="
-                        color:#856404;
-                        font-weight:bold;
-                    ">⏳ ${order.payment_status || "Pending"}</span>`
-                }
-            </p>
+           <p>
+    <strong>💳 Payment:</strong>
+
+    ${
+        order.payment_status === "Paid"
+        ? `<span style="
+            display:inline-block;
+            background:#d1e7dd;
+            color:#0f5132;
+            padding:6px 14px;
+            border-radius:20px;
+            font-weight:bold;
+            margin-left:5px;
+        ">✅ Paid</span>`
+
+        : order.payment_status === "Failed"
+        ? `<span style="
+            display:inline-block;
+            background:#f8d7da;
+            color:#842029;
+            padding:6px 14px;
+            border-radius:20px;
+            font-weight:bold;
+            margin-left:5px;
+        ">❌ Failed</span>`
+
+        : `<span style="
+            display:inline-block;
+            background:#fff3cd;
+            color:#664d03;
+            padding:6px 14px;
+            border-radius:20px;
+            font-weight:bold;
+            margin-left:5px;
+        ">⏳ ${order.payment_status || "Pending"}</span>`
+    }
+
+</p>
 
             <p>
     <strong>📦 Order Status:</strong>
