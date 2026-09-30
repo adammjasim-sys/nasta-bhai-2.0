@@ -1124,11 +1124,45 @@ async function trackOrder() {
             </p>
 
             <p>
-                <strong>📦 Order Status:</strong>
-                <span style="font-weight:bold;">
-                    ${order.status || "New"}
-                </span>
-            </p>
+    <strong>📦 Order Status:</strong>
+
+    ${
+        order.status === "New"
+        ? `<span style="
+            color:#0d6efd;
+            font-weight:bold;
+        ">🆕 New</span>`
+
+        : order.status === "Confirmed"
+        ? `<span style="
+            color:#198754;
+            font-weight:bold;
+        ">✅ Confirmed</span>`
+
+        : order.status === "Preparing"
+        ? `<span style="
+            color:#856404;
+            font-weight:bold;
+        ">🍳 Preparing</span>`
+
+        : order.status === "Delivered"
+        ? `<span style="
+            color:#198754;
+            font-weight:bold;
+        ">📦 Delivered</span>`
+
+        : order.status === "Cancelled"
+        ? `<span style="
+            color:#dc3545;
+            font-weight:bold;
+        ">❌ Cancelled</span>`
+
+        : `<span style="font-weight:bold;">
+            ${order.status || "New"}
+        </span>`
+    }
+
+</p>
 
         </div>
     `;
