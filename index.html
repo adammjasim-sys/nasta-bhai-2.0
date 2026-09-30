@@ -1197,7 +1197,7 @@ async function trackOrder() {
 
 <div style="
     margin:20px 0;
-    padding:15px;
+    padding:18px;
     background:#f8f9fa;
     border-radius:12px;
     border:1px solid #e5e5e5;
@@ -1206,16 +1206,16 @@ async function trackOrder() {
     <div style="
         text-align:center;
         font-weight:bold;
-        margin-bottom:18px;
-        font-size:17px;
+        margin-bottom:20px;
+        font-size:18px;
     ">
         📦 অর্ডারের অগ্রগতি
     </div>
 
     <div style="
         display:flex;
-        align-items:center;
         justify-content:space-between;
+        align-items:flex-start;
         position:relative;
     ">
 
@@ -1224,19 +1224,19 @@ async function trackOrder() {
         <div style="
             position:absolute;
             top:18px;
-            left:10%;
-            right:10%;
+            left:12%;
+            right:12%;
             height:4px;
             background:#ddd;
             z-index:0;
         "></div>
 
 
-        <!-- NEW -->
+        <!-- 1. NEW -->
 
         <div style="
-            text-align:center;
             width:25%;
+            text-align:center;
             position:relative;
             z-index:1;
         ">
@@ -1260,7 +1260,7 @@ async function trackOrder() {
             </div>
 
             <div style="
-                margin-top:7px;
+                margin-top:8px;
                 font-size:12px;
                 font-weight:bold;
             ">
@@ -1270,11 +1270,11 @@ async function trackOrder() {
         </div>
 
 
-        <!-- CONFIRMED -->
+        <!-- 2. CONFIRMED -->
 
         <div style="
-            text-align:center;
             width:25%;
+            text-align:center;
             position:relative;
             z-index:1;
         ">
@@ -1298,7 +1298,7 @@ async function trackOrder() {
             </div>
 
             <div style="
-                margin-top:7px;
+                margin-top:8px;
                 font-size:12px;
                 font-weight:bold;
             ">
@@ -1308,11 +1308,11 @@ async function trackOrder() {
         </div>
 
 
-        <!-- PREPARING -->
+        <!-- 3. PREPARING -->
 
         <div style="
-            text-align:center;
             width:25%;
+            text-align:center;
             position:relative;
             z-index:1;
         ">
@@ -1336,7 +1336,7 @@ async function trackOrder() {
             </div>
 
             <div style="
-                margin-top:7px;
+                margin-top:8px;
                 font-size:12px;
                 font-weight:bold;
             ">
@@ -1346,11 +1346,11 @@ async function trackOrder() {
         </div>
 
 
-        <!-- DELIVERED -->
+        <!-- 4. DELIVERED -->
 
         <div style="
-            text-align:center;
             width:25%;
+            text-align:center;
             position:relative;
             z-index:1;
         ">
@@ -1373,7 +1373,7 @@ async function trackOrder() {
             </div>
 
             <div style="
-                margin-top:7px;
+                margin-top:8px;
                 font-size:12px;
                 font-weight:bold;
             ">
@@ -1385,7 +1385,11 @@ async function trackOrder() {
     </div>
 
 </div>
-          <p>
+
+
+<!-- CURRENT ORDER STATUS -->
+
+<p>
     <strong>📦 Order Status:</strong>
 
     ${
