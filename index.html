@@ -1097,7 +1097,30 @@ async function trackOrder() {
             <h3 style="margin-top:0;">
                 🧾 Order #${order.id}
             </h3>
+<h3 style="margin-top:0;">
+    🧾 Order #${order.id}
+</h3>
 
+<p>
+    <strong>🕐 অর্ডার করা হয়েছে:</strong>
+    ${
+        order.created_at
+        ? new Date(order.created_at).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        })
+        : "তথ্য পাওয়া যায়নি"
+    }
+</p>
+
+<p>
+    <strong>👤 নাম:</strong>
+    ${order.customer_name}
+</p>
             <p>
                 <strong>👤 নাম:</strong>
                 ${order.customer_name}
