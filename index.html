@@ -1193,7 +1193,198 @@ async function trackOrder() {
     }
 
 </p>
+<!-- ORDER PROGRESS BAR -->
 
+<div style="
+    margin:20px 0;
+    padding:15px;
+    background:#f8f9fa;
+    border-radius:12px;
+    border:1px solid #e5e5e5;
+">
+
+    <div style="
+        text-align:center;
+        font-weight:bold;
+        margin-bottom:18px;
+        font-size:17px;
+    ">
+        📦 অর্ডারের অগ্রগতি
+    </div>
+
+    <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        position:relative;
+    ">
+
+        <!-- Connecting Line -->
+
+        <div style="
+            position:absolute;
+            top:18px;
+            left:10%;
+            right:10%;
+            height:4px;
+            background:#ddd;
+            z-index:0;
+        "></div>
+
+
+        <!-- NEW -->
+
+        <div style="
+            text-align:center;
+            width:25%;
+            position:relative;
+            z-index:1;
+        ">
+
+            <div style="
+                width:36px;
+                height:36px;
+                line-height:36px;
+                margin:auto;
+                border-radius:50%;
+                background:${
+                    ["New","Confirmed","Preparing","Delivered"]
+                    .includes(order.status)
+                    ? "#198754"
+                    : "#ddd"
+                };
+                color:white;
+                font-weight:bold;
+            ">
+                ✓
+            </div>
+
+            <div style="
+                margin-top:7px;
+                font-size:12px;
+                font-weight:bold;
+            ">
+                🆕 New
+            </div>
+
+        </div>
+
+
+        <!-- CONFIRMED -->
+
+        <div style="
+            text-align:center;
+            width:25%;
+            position:relative;
+            z-index:1;
+        ">
+
+            <div style="
+                width:36px;
+                height:36px;
+                line-height:36px;
+                margin:auto;
+                border-radius:50%;
+                background:${
+                    ["Confirmed","Preparing","Delivered"]
+                    .includes(order.status)
+                    ? "#198754"
+                    : "#ddd"
+                };
+                color:white;
+                font-weight:bold;
+            ">
+                ✓
+            </div>
+
+            <div style="
+                margin-top:7px;
+                font-size:12px;
+                font-weight:bold;
+            ">
+                ✅ Confirmed
+            </div>
+
+        </div>
+
+
+        <!-- PREPARING -->
+
+        <div style="
+            text-align:center;
+            width:25%;
+            position:relative;
+            z-index:1;
+        ">
+
+            <div style="
+                width:36px;
+                height:36px;
+                line-height:36px;
+                margin:auto;
+                border-radius:50%;
+                background:${
+                    ["Preparing","Delivered"]
+                    .includes(order.status)
+                    ? "#198754"
+                    : "#ddd"
+                };
+                color:white;
+                font-weight:bold;
+            ">
+                ✓
+            </div>
+
+            <div style="
+                margin-top:7px;
+                font-size:12px;
+                font-weight:bold;
+            ">
+                🍳 Preparing
+            </div>
+
+        </div>
+
+
+        <!-- DELIVERED -->
+
+        <div style="
+            text-align:center;
+            width:25%;
+            position:relative;
+            z-index:1;
+        ">
+
+            <div style="
+                width:36px;
+                height:36px;
+                line-height:36px;
+                margin:auto;
+                border-radius:50%;
+                background:${
+                    order.status === "Delivered"
+                    ? "#198754"
+                    : "#ddd"
+                };
+                color:white;
+                font-weight:bold;
+            ">
+                ✓
+            </div>
+
+            <div style="
+                margin-top:7px;
+                font-size:12px;
+                font-weight:bold;
+            ">
+                📦 Delivered
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
           <p>
     <strong>📦 Order Status:</strong>
 
