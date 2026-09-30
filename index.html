@@ -1107,7 +1107,54 @@ async function trackOrder() {
                 <strong>💰 মোট:</strong>
                 ৳${order.total}
             </p>
+<p>
+    <strong>🍴 অর্ডারের তালিকা:</strong>
+</p>
 
+<div style="
+    background:#f8f9fa;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:15px;
+">
+
+    ${
+        Array.isArray(order.order_items)
+        ? order.order_items.map(item => `
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                padding:6px 0;
+                border-bottom:1px solid #ddd;
+            ">
+                <span>
+                    ${item.name} × ${item.quantity || item.qty || 1}
+                </span>
+
+                <span>
+                    ৳${item.item_total || 0}
+                </span>
+            </div>
+        `).join("")
+        : ""
+    }
+
+</div>
+
+<p>
+    <strong>💰 পণ্যের মূল্য:</strong>
+    ৳${order.subtotal}
+</p>
+
+<p>
+    <strong>🚚 ডেলিভারি চার্জ:</strong>
+    ৳${order.delivery_charge}
+</p>
+
+<p>
+    <strong>💵 সর্বমোট:</strong>
+    <strong>৳${order.total}</strong>
+</p>
             <p>
                 <strong>💳 Payment:</strong>
                 ${
