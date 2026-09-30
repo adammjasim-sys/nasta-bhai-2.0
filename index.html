@@ -1167,7 +1167,20 @@ async function trackOrder() {
         </div>
     `;
 }
+// =================================
+// AUTO REFRESH ORDER TRACKING
+// =================================
 
+setInterval(function () {
+
+    const orderId =
+        document.getElementById("trackOrderId").value.trim();
+
+    if (orderId) {
+        trackOrder();
+    }
+
+}, 10000);
 const paymentMethodSelect = document.getElementById("paymentMethod");
 
 const bkashPaymentBox = document.getElementById("bkashPaymentBox");
