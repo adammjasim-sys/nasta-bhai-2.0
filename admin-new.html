@@ -503,7 +503,24 @@ async function loadOrders() {
         .order("created_at", {
             ascending: false
         });
+// TODAY & TOMORROW DELIVERY DATE
 
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+
+const todayDate = today.toISOString().split("T")[0];
+const tomorrowDate = tomorrow.toISOString().split("T")[0];
+
+const todayOrders = orders.filter(order =>
+    order.delivery_date === todayDate
+);
+
+const tomorrowOrders = orders.filter(order =>
+    order.delivery_date === tomorrowDate
+);
     if (error) {
 
         ordersDiv.innerHTML =
@@ -599,6 +616,10 @@ async function loadOrders() {
     </a>
 
 </div>
+<p>
+    <strong>📅 ডেলিভারি তারিখ:</strong>
+    ${order.delivery_date || "তারিখ নেই"}
+</p>
             <p>
                 <strong>📍 ঠিকানা:</strong>
                 ${order.customer_address || ""}
