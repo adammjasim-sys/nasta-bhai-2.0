@@ -497,12 +497,23 @@ async function loadOrders() {
         "Loading orders...";
 
     const { data: orders, error } =
-        await supabaseClient
-        .from("orders")
-        .select("*")
-        .order("created_at", {
-            ascending: false
-        });
+    await supabaseClient
+    .from("orders")
+    .select("*")
+    .order("created_at", {
+        ascending: false
+    });
+
+if (error) {
+
+    ordersDiv.innerHTML =
+        `<p class="error">
+            ${error.message}
+        </p>`;
+
+    return;
+}
+
 // TODAY & TOMORROW DELIVERY DATE
 
 const today = new Date();
@@ -511,8 +522,11 @@ today.setHours(0, 0, 0, 0);
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);
 
-const todayDate = today.toISOString().split("T")[0];
-const tomorrowDate = tomorrow.toISOString().split("T")[0];
+const todayDate =
+    today.toISOString().split("T")[0];
+
+const tomorrowDate =
+    tomorrow.toISOString().split("T")[0];
 
 const todayOrders = orders.filter(order =>
     order.delivery_date === todayDate
@@ -521,15 +535,7 @@ const todayOrders = orders.filter(order =>
 const tomorrowOrders = orders.filter(order =>
     order.delivery_date === tomorrowDate
 );
-    if (error) {
-
-        ordersDiv.innerHTML =
-            `<p class="error">
-                ${error.message}
-            </p>`;
-
-        return;
-    }
+   
 
     if (!orders || orders.length === 0) {
 
