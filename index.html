@@ -380,7 +380,26 @@
         >
 
       </div>
+      <div class="form-group">
 
+        <label for="deliveryDate">
+          📅 ডেলিভারি তারিখ
+        </label>
+
+        <input
+          type="date"
+          id="deliveryDate"
+        >
+
+        <small style="
+          display:block;
+          margin-top:6px;
+          color:#666;
+        ">
+          ⏰ সকাল ৯:০০টার ডেলিভারির জন্য আগের দিন সকাল ৯টা থেকে রাত ১১টা পর্যন্ত অর্ডার করা যাবে।
+        </small>
+
+      </div>
 
       <div class="form-group">
 
@@ -941,7 +960,40 @@ let paymentStatus = "Unpaid";
 if (paymentMethod === "bKash Manual") {
   paymentStatus = "Pending";
 }
+const deliveryDate = document.getElementById("deliveryDate").value;
 
+if (!deliveryDate) {
+    alert("⚠️ অনুগ্রহ করে ডেলিভারি তারিখ নির্বাচন করুন।");
+    return;
+}
+ // DELIVERY TIME RULE
+const now = new Date();
+
+const selectedDate = new Date(deliveryDate + "T09:00:00");
+
+// Order window:
+// Previous day 09:00 AM → Previous day 11:00 PM
+
+const orderOpenTime = new Date(selectedDate);
+orderOpenTime.setDate(orderOpenTime.getDate() - 1);
+orderOpenTime.setHours(9, 0, 0, 0);
+
+const orderCloseTime = new Date(selectedDate);
+orderCloseTime.setDate(orderCloseTime.getDate() - 1);
+orderCloseTime.setHours(23, 0, 0, 0);
+
+// Check order time
+
+if (now < orderOpenTime || now > orderCloseTime) {
+
+    alert(
+        "⚠️ এই ডেলিভারি তারিখের অর্ডার এখন নেওয়া হচ্ছে না।\n\n" +
+        "অর্ডার নেওয়ার সময়:\n" +
+        "আগের দিন সকাল ৯:০০টা থেকে রাত ১১:০০টা পর্যন্ত।"
+    );
+
+    return;
+}     
 const { data: orderData, error } = await supabaseClient
     .from("orders")
     .insert([{
@@ -953,6 +1005,7 @@ const { data: orderData, error } = await supabaseClient
         delivery_charge: delivery,
         total: total,
         status: "New",
+        delivery_date: deliveryDate,
         payment_method: paymentMethod,
         payment_status: paymentStatus,
         transaction_id: transactionId
