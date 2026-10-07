@@ -514,19 +514,30 @@ if (error) {
     return;
 }
 
-// TODAY & TOMORROW DELIVERY DATE
+// =========================
+// BANGLADESH TODAY & TOMORROW
+// =========================
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+const bdNow = new Date(
+    new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Dhaka"
+    })
+);
 
-const tomorrow = new Date(today);
-tomorrow.setDate(tomorrow.getDate() + 1);
+bdNow.setHours(0, 0, 0, 0);
+
+const bdTomorrow = new Date(bdNow);
+bdTomorrow.setDate(bdTomorrow.getDate() + 1);
 
 const todayDate =
-    today.toISOString().split("T")[0];
+    `${bdNow.getFullYear()}-` +
+    `${String(bdNow.getMonth() + 1).padStart(2, "0")}-` +
+    `${String(bdNow.getDate()).padStart(2, "0")}`;
 
 const tomorrowDate =
-    tomorrow.toISOString().split("T")[0];
+    `${bdTomorrow.getFullYear()}-` +
+    `${String(bdTomorrow.getMonth() + 1).padStart(2, "0")}-` +
+    `${String(bdTomorrow.getDate()).padStart(2, "0")}`;
 
 const todayOrders = orders.filter(order =>
     order.delivery_date === todayDate
