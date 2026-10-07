@@ -562,16 +562,82 @@ const tomorrowOrders = orders.filter(order =>
 
     ordersDiv.innerHTML = "";
 
-    orders.forEach(order => {
+let todayTitleShown = false;
+let tomorrowTitleShown = false;
+let otherTitleShown = false;
 
-        let orderItems = [];
+orders.forEach(order => {
 
-        try {
+    // =========================
+    // DELIVERY GROUP TITLE
+    // =========================
 
-            orderItems =
-                typeof order.order_items === "string"
-                ? JSON.parse(order.order_items)
-                : order.order_items;
+    if (
+        order.delivery_date === todayDate &&
+        !todayTitleShown
+    ) {
+
+        ordersDiv.innerHTML += `
+            <h2 style="
+                background:#198754;
+                color:white;
+                padding:12px;
+                border-radius:8px;
+                margin:15px 0 10px;
+            ">
+                📦 আজকের ডেলিভারি
+                <span style="font-size:14px;">
+                    (${todayOrders.length} টি)
+                </span>
+            </h2>
+        `;
+
+        todayTitleShown = true;
+    }
+
+    else if (
+        order.delivery_date === tomorrowDate &&
+        !tomorrowTitleShown
+    ) {
+
+        ordersDiv.innerHTML += `
+            <h2 style="
+                background:#0d6efd;
+                color:white;
+                padding:12px;
+                border-radius:8px;
+                margin:20px 0 10px;
+            ">
+                📅 আগামীকালের ডেলিভারি
+                <span style="font-size:14px;">
+                    (${tomorrowOrders.length} টি)
+                </span>
+            </h2>
+        `;
+
+        tomorrowTitleShown = true;
+    }
+
+    else if (
+        order.delivery_date !== todayDate &&
+        order.delivery_date !== tomorrowDate &&
+        !otherTitleShown
+    ) {
+
+        ordersDiv.innerHTML += `
+            <h2 style="
+                background:#6c757d;
+                color:white;
+                padding:12px;
+                border-radius:8px;
+                margin:20px 0 10px;
+            ">
+                📋 অন্যান্য অর্ডার
+            </h2>
+        `;
+
+        otherTitleShown = true;
+    }
 
         } catch (e) {
 
