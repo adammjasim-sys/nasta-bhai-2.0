@@ -549,7 +549,27 @@ const tomorrowOrders = orders.filter(order =>
     order.delivery_date === tomorrowDate
 );
    
+// =========================
+// SORT ORDERS BY DELIVERY
+// =========================
 
+orders.sort((a, b) => {
+
+    const getPriority = (order) => {
+
+        if (order.delivery_date === todayDate) {
+            return 1;
+        }
+
+        if (order.delivery_date === tomorrowDate) {
+            return 2;
+        }
+
+        return 3;
+    };
+
+    return getPriority(a) - getPriority(b);
+});
     if (!orders || orders.length === 0) {
 
         ordersDiv.innerHTML =
