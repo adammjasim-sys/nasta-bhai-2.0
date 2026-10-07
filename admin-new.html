@@ -583,77 +583,96 @@ orders.sort((a, b) => {
     updateDashboard(orders);
 
     ordersDiv.innerHTML = "";
-let lastGroup = "";
+
+// =========================
+// TODAY & TOMORROW HEADINGS
+// =========================
+
+if (todayOrders.length > 0) {
+
+    ordersDiv.innerHTML += `
+        <h2 style="
+            margin:20px 0 10px;
+            padding:12px;
+            background:#e8f5e9;
+            border-radius:8px;
+        ">
+            📦 আজকের ডেলিভারি
+        </h2>
+    `;
+
+} else {
+
+    ordersDiv.innerHTML += `
+        <h2 style="
+            margin:20px 0 10px;
+            padding:12px;
+            background:#e8f5e9;
+            border-radius:8px;
+        ">
+            📦 আজকের ডেলিভারি
+        </h2>
+
+        <p style="
+            padding:10px;
+            color:#666;
+        ">
+            আজ কোনো ডেলিভারি নেই।
+        </p>
+    `;
+}
+
+
+if (tomorrowOrders.length > 0) {
+
+    ordersDiv.innerHTML += `
+        <h2 style="
+            margin:20px 0 10px;
+            padding:12px;
+            background:#fff3e0;
+            border-radius:8px;
+        ">
+            📅 আগামীকালের ডেলিভারি
+        </h2>
+    `;
+
+} else {
+
+    ordersDiv.innerHTML += `
+        <h2 style="
+            margin:20px 0 10px;
+            padding:12px;
+            background:#fff3e0;
+            border-radius:8px;
+        ">
+            📅 আগামীকালের ডেলিভারি
+        </h2>
+
+        <p style="
+            padding:10px;
+            color:#666;
+        ">
+            আগামীকাল কোনো ডেলিভারি নেই।
+        </p>
+    `;
+}
+
 orders.forEach(order => {
-    let currentGroup = "other";
-
-    if (order.delivery_date === todayDate) {
-        currentGroup = "today";
-    } else if (order.delivery_date === tomorrowDate) {
-        currentGroup = "tomorrow";
-    }
-
-    if (currentGroup !== lastGroup) {
-
-        if (currentGroup === "today") {
-            ordersDiv.innerHTML += `
-                <h2 style="
-                    margin:20px 0 10px;
-                    padding:12px;
-                    background:#e8f5e9;
-                    border-radius:8px;
-                ">
-                    📦 আজকের ডেলিভারি
-                </h2>
-            `;
-        }
-
-        if (currentGroup === "tomorrow") {
-            ordersDiv.innerHTML += `
-                <h2 style="
-                    margin:20px 0 10px;
-                    padding:12px;
-                    background:#fff3e0;
-                    border-radius:8px;
-                ">
-                    📅 আগামীকালের ডেলিভারি
-                </h2>
-            `;
-        }
-
-        if (currentGroup === "other") {
-            ordersDiv.innerHTML += `
-                <h2 style="
-                    margin:20px 0 10px;
-                    padding:12px;
-                    background:#f5f5f5;
-                    border-radius:8px;
-                ">
-                    📋 অন্যান্য অর্ডার
-                </h2>
-            `;
-        }
-
-        lastGroup = currentGroup;
-    }
 
     let orderItems = [];
 
     try {
-    
 
         orderItems =
             typeof order.order_items === "string"
             ? JSON.parse(order.order_items)
             : order.order_items;
 
+    } catch (e) {
 
+        orderItems = [];
 
-        } catch (e) {
-
-            orderItems = [];
-
-        }
+    }
 
 
         const orderHTML = `
