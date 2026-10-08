@@ -371,6 +371,21 @@ button {
 >
     📅 আগামীকালের অর্ডার Excel
 </button>
+     <button
+    onclick="exportProductSalesToExcel()"
+    style="
+        background:#fd7e14;
+        color:white;
+        padding:10px 16px;
+        border:none;
+        border-radius:7px;
+        cursor:pointer;
+        font-size:15px;
+        margin:5px;
+    "
+>
+    📈 Product Sales Report
+</button>       
 <!-- Search Box -->
 <div style="margin:20px 0;">
 
@@ -1380,6 +1395,108 @@ function createExcelFile(orders, fileName) {
     XLSX.writeFile(
         workbook,
         fileName
+    );
+}
+    async function exportProductSalesToExcel() {
+
+    const { data: orders, error } =
+        await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        alert("Product Sales Report তৈরি করা যায়নি: " + error.message);
+        return;
+    }
+
+    if (!orders || orders.length === 0) {
+        alert("কোনো অর্ডার পাওয়া যায়নি।");
+        return;
+    }
+
+    const productReport = {};
+
+    orders.forEach(order => {
+
+        let items = [];
+
+        try {
+            items =
+                typeof order.order_items === "string"
+                    ? JSON.parse(order.order_items)
+                    : (order.order_items || []);
+        } catch (e) {
+            items = [];
+        }
+
+        items.forEach(item => {
+
+            const productName =
+                item.name || "Unknown Product";
+
+            const quantity =
+                Number(item.quantity ?? item.qty ?? 0);
+
+            const price =
+                Number(item.price || 0);
+
+            const itemTotal =
+                Number(
+                    item.item_total ??
+                    (quantity * price)
+                );
+
+            if (!productReport[productName]) {
+
+                productReport[productName] = {
+                    quantity: 0,
+                    sales: 0
+                };
+
+            }
+
+            productReport[productName].quantity += quantity;
+            productReport[productName].sales += itemTotal;
+
+        });
+
+    });
+
+    const excelData =
+        Object.keys(productReport).map(productName => {
+
+            return {
+                "Product": productName,
+                "Quantity Sold":
+                    productReport[productName].quantity,
+                "Total Sales":
+                    productReport[productName].sales
+            };
+
+        });
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(excelData);
+
+    worksheet["!cols"] = [
+        { wch: 25 },
+        { wch: 18 },
+        { wch: 18 }
+    ];
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Product Sales"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        "Nasta_Bhai_Product_Sales.xlsx"
     );
 }
    </script>
