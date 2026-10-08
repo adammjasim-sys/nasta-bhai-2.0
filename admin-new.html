@@ -340,6 +340,37 @@ button {
 >
     📊 Export Orders to Excel
 </button>
+            <button
+    onclick="exportTodayOrdersToExcel()"
+    style="
+        background:#0d6efd;
+        color:white;
+        padding:10px 16px;
+        border:none;
+        border-radius:7px;
+        cursor:pointer;
+        font-size:15px;
+        margin:5px;
+    "
+>
+    📊 আজকের অর্ডার Excel
+</button>
+
+<button
+    onclick="exportTomorrowOrdersToExcel()"
+    style="
+        background:#6f42c1;
+        color:white;
+        padding:10px 16px;
+        border:none;
+        border-radius:7px;
+        cursor:pointer;
+        font-size:15px;
+        margin:5px;
+    "
+>
+    📅 আগামীকালের অর্ডার Excel
+</button>
 <!-- Search Box -->
 <div style="margin:20px 0;">
 
@@ -1191,7 +1222,168 @@ async function exportOrdersToExcel() {
         "Nasta_Bhai_Orders.xlsx"
     );
 }
-   </script> 
+    async function exportTodayOrdersToExcel() {
+
+    const { data: orders, error } =
+        await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        alert("আজকের অর্ডার Export করা যায়নি: " + error.message);
+        return;
+    }
+
+    const bdNow = new Date(
+        new Date().toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka"
+        })
+    );
+
+    const todayDate =
+        `${bdNow.getFullYear()}-` +
+        `${String(bdNow.getMonth() + 1).padStart(2, "0")}-` +
+        `${String(bdNow.getDate()).padStart(2, "0")}`;
+
+    const todayOrders = orders.filter(order =>
+        order.delivery_date === todayDate
+    );
+
+    if (todayOrders.length === 0) {
+        alert("আজকের কোনো অর্ডার পাওয়া যায়নি।");
+        return;
+    }
+
+    createExcelFile(
+        todayOrders,
+        "Nasta_Bhai_Today_Orders.xlsx"
+    );
+}
+
+
+async function exportTomorrowOrdersToExcel() {
+
+    const { data: orders, error } =
+        await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        alert("আগামীকালের অর্ডার Export করা যায়নি: " + error.message);
+        return;
+    }
+
+    const bdNow = new Date(
+        new Date().toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka"
+        })
+    );
+
+    bdNow.setDate(bdNow.getDate() + 1);
+
+    const tomorrowDate =
+        `${bdNow.getFullYear()}-` +
+        `${String(bdNow.getMonth() + 1).padStart(2, "0")}-` +
+        `${String(bdNow.getDate()).padStart(2, "0")}`;
+
+    const tomorrowOrders = orders.filter(order =>
+        order.delivery_date === tomorrowDate
+    );
+
+    if (tomorrowOrders.length === 0) {
+        alert("আগামীকালের কোনো অর্ডার পাওয়া যায়নি।");
+        return;
+    }
+
+    createExcelFile(
+        tomorrowOrders,
+        "Nasta_Bhai_Tomorrow_Orders.xlsx"
+    );
+}
+
+
+function createExcelFile(orders, fileName) {
+
+    const excelData = orders.map(order => {
+
+        let items = [];
+
+        try {
+            items =
+                typeof order.order_items === "string"
+                    ? JSON.parse(order.order_items)
+                    : (order.order_items || []);
+        } catch (e) {
+            items = [];
+        }
+
+        const itemText = items.map(item =>
+            `${item.name || "পণ্য"} × ${item.quantity ?? item.qty ?? 0}`
+        ).join(", ");
+
+        return {
+            "Order ID": order.id,
+            "Customer Name": order.customer_name || "",
+            "Phone": order.customer_phone || "",
+            "Address": order.customer_address || "",
+            "Delivery Date": order.delivery_date || "",
+            "Order Items": itemText,
+            "Subtotal": Number(order.subtotal || 0),
+            "Delivery Charge": Number(order.delivery_charge || 0),
+            "Total": Number(order.total || 0),
+            "Payment Method": order.payment_method || "",
+            "Payment Status": order.payment_status || "Pending",
+            "Transaction ID": order.transaction_id || "",
+            "Order Status": order.status || "New",
+            "Order Date": order.created_at
+                ? new Date(order.created_at).toLocaleString(
+                    "en-GB",
+                    {
+                        timeZone: "Asia/Dhaka"
+                    }
+                )
+                : ""
+        };
+    });
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(excelData);
+
+    worksheet["!cols"] = [
+        { wch: 10 },
+        { wch: 20 },
+        { wch: 16 },
+        { wch: 30 },
+        { wch: 15 },
+        { wch: 35 },
+        { wch: 12 },
+        { wch: 15 },
+        { wch: 12 },
+        { wch: 18 },
+        { wch: 16 },
+        { wch: 18 },
+        { wch: 15 },
+        { wch: 20 }
+    ];
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Orders"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        fileName
+    );
+}
+   </script>
+   
 </body>
 </html>
 ```
