@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>নাস্তা ভাই | Admin Panel</title>
-
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <style>
 * {
     box-sizing: border-box;
@@ -325,6 +325,21 @@ button {
         <div class="orders-box">
 
             <h2>📦 Customer Orders</h2>
+            <button
+    onclick="exportOrdersToExcel()"
+    style="
+        background:#198754;
+        color:white;
+        padding:10px 16px;
+        border:none;
+        border-radius:7px;
+        cursor:pointer;
+        font-size:15px;
+        margin:10px 0 15px;
+    "
+>
+    📊 Export Orders to Excel
+</button>
 <!-- Search Box -->
 <div style="margin:20px 0;">
 
@@ -1085,7 +1100,97 @@ async function checkSession() {
 checkSession();
 
 </script>
+async function exportOrdersToExcel() {
 
+    const { data: orders, error } =
+        await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        alert("Excel export failed: " + error.message);
+        return;
+    }
+
+    if (!orders || orders.length === 0) {
+        alert("কোনো অর্ডার পাওয়া যায়নি।");
+        return;
+    }
+
+    const excelData = orders.map(order => {
+
+        let items = [];
+
+        try {
+            items =
+                typeof order.order_items === "string"
+                    ? JSON.parse(order.order_items)
+                    : (order.order_items || []);
+        } catch (e) {
+            items = [];
+        }
+
+        const itemText = items.map(item =>
+            `${item.name || "পণ্য"} × ${item.quantity ?? item.qty ?? 0}`
+        ).join(", ");
+
+        return {
+            "Order ID": order.id,
+            "Customer Name": order.customer_name || "",
+            "Phone": order.customer_phone || "",
+            "Address": order.customer_address || "",
+            "Delivery Date": order.delivery_date || "",
+            "Order Items": itemText,
+            "Subtotal": Number(order.subtotal || 0),
+            "Delivery Charge": Number(order.delivery_charge || 0),
+            "Total": Number(order.total || 0),
+            "Payment Method": order.payment_method || "",
+            "Payment Status": order.payment_status || "Pending",
+            "Transaction ID": order.transaction_id || "",
+            "Order Status": order.status || "New",
+            "Order Date": order.created_at
+                ? new Date(order.created_at).toLocaleString("en-GB", {
+                    timeZone: "Asia/Dhaka"
+                })
+                : ""
+        };
+    });
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(excelData);
+
+    worksheet["!cols"] = [
+        { wch: 10 },
+        { wch: 20 },
+        { wch: 16 },
+        { wch: 30 },
+        { wch: 15 },
+        { wch: 35 },
+        { wch: 12 },
+        { wch: 15 },
+        { wch: 12 },
+        { wch: 18 },
+        { wch: 16 },
+        { wch: 18 },
+        { wch: 15 },
+        { wch: 20 }
+    ];
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Orders"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        "Nasta_Bhai_Orders.xlsx"
+    );
+}
 </body>
 </html>
 ```
