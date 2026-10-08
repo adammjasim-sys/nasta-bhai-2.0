@@ -385,7 +385,22 @@ button {
     "
 >
     📈 Product Sales Report
-</button>       
+</button> 
+            <button
+    onclick="exportDailySalesSummary()"
+    style="
+        background:#20c997;
+        color:white;
+        padding:10px 16px;
+        border:none;
+        border-radius:7px;
+        cursor:pointer;
+        font-size:15px;
+        margin:5px;
+    "
+>
+    📊 Daily Sales Summary
+</button>
 <!-- Search Box -->
 <div style="margin:20px 0;">
 
@@ -1499,8 +1514,127 @@ function createExcelFile(orders, fileName) {
         "Nasta_Bhai_Product_Sales.xlsx"
     );
 }
+   async function exportDailySalesSummary() {
+
+    const { data: orders, error } =
+        await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        alert("Daily Sales Summary তৈরি করা যায়নি: " + error.message);
+        return;
+    }
+
+    if (!orders || orders.length === 0) {
+        alert("কোনো অর্ডার পাওয়া যায়নি।");
+        return;
+    }
+
+    const dailyReport = {};
+
+    orders.forEach(order => {
+
+        const date = order.delivery_date
+            || (
+                order.created_at
+                    ? new Date(order.created_at)
+                        .toLocaleDateString("en-CA", {
+                            timeZone: "Asia/Dhaka"
+                        })
+                    : ""
+            );
+
+        if (!date) return;
+
+        if (!dailyReport[date]) {
+
+            dailyReport[date] = {
+                orders: 0,
+                productSales: 0,
+                deliveryCharge: 0,
+                totalSales: 0,
+                paid: 0,
+                pending: 0
+            };
+        }
+
+        dailyReport[date].orders += 1;
+
+        dailyReport[date].productSales +=
+            Number(order.subtotal || 0);
+
+        dailyReport[date].deliveryCharge +=
+            Number(order.delivery_charge || 0);
+
+        dailyReport[date].totalSales +=
+            Number(order.total || 0);
+
+        if (
+            String(order.payment_status || "")
+                .toLowerCase() === "paid"
+        ) {
+
+            dailyReport[date].paid +=
+                Number(order.total || 0);
+
+        } else {
+
+            dailyReport[date].pending +=
+                Number(order.total || 0);
+
+        }
+
+    });
+
+    const excelData =
+        Object.keys(dailyReport)
+        .sort()
+        .map(date => {
+
+            const report = dailyReport[date];
+
+            return {
+                "Date": date,
+                "Total Orders": report.orders,
+                "Product Sales": report.productSales,
+                "Delivery Charge": report.deliveryCharge,
+                "Total Sales": report.totalSales,
+                "Paid": report.paid,
+                "Pending": report.pending
+            };
+
+        });
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(excelData);
+
+    worksheet["!cols"] = [
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 18 },
+        { wch: 20 },
+        { wch: 18 },
+        { wch: 15 },
+        { wch: 15 }
+    ];
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Daily Sales"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        "Nasta_Bhai_Daily_Sales_Summary.xlsx"
+    );
+} 
    </script>
-   
 </body>
 </html>
 ```
