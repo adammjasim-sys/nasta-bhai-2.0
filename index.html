@@ -630,6 +630,86 @@ footer {
     }
 }
 
+/* HERO LAYOUT */
+.hero {
+    background: linear-gradient(120deg, #064e35, #087c48);
+    color: white;
+    padding: 45px 30px;
+    border-radius: 0 0 24px 24px;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 30px;
+}
+
+.hero-text {
+    text-align: left;
+}
+
+.hero-tagline {
+    display: inline-block;
+    color: #fff;
+    background: #e8750b;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.hero h1 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    line-height: 1.45;
+    margin: 0 0 16px;
+}
+
+.hero-description {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.hero-image img {
+    display: block;
+    width: 100%;
+    max-height: 370px;
+    object-fit: cover;
+    border-radius: 22px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 700px) {
+    .hero {
+        padding: 32px 18px;
+    }
+
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .hero-text {
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 29px;
+    }
+
+    .hero-description {
+        font-size: 16px;
+    }
+
+    .hero-image img {
+        max-height: 250px;
+    }
+}
+
   </style>
 </head>
 
@@ -654,20 +734,41 @@ footer {
   </header>
 
 
-  <!-- HERO -->
-  <section class="hero" id="home">
+ 
+<!-- HERO -->
+<section class="hero" id="home">
 
-    <h1>সহজে অর্ডার করুন, মজায় নাস্তা করুন!</h1>
+  <div class="hero-content">
 
-    <p>
-      আপনার পছন্দের নাস্তা এখন ঘরে বসেই অর্ডার করুন।
-    </p>
+    <div class="hero-text">
+      <p class="hero-tagline">🍃 তাজা, সুস্বাদু, ঘরে তৈরি</p>
 
-    <a href="#menu" class="hero-btn">
-      🍴 মেনু দেখুন
-    </a>
+      <h1>
+        সহজে অর্ডার করুন,<br>
+        মজায় নাস্তা করুন!
+      </h1>
 
-  </section>
+      <p class="hero-description">
+        আপনার পছন্দের নাস্তা এখন ঘরে বসেই অর্ডার করুন।
+        সুস্বাদু খাবার, সহজ অর্ডার, দ্রুত ডেলিভারি!
+      </p>
+
+      <a href="#menu" class="hero-btn">
+        🍴 মেনু দেখুন →
+      </a>
+    </div>
+
+    <div class="hero-image">
+      <img
+        src="hero-food.png"
+        alt="নাস্তা ভাইয়ের সুস্বাদু সিঙ্গারা, কেক ও অন্যান্য নাস্তা"
+      >
+    </div>
+
+  </div>
+
+</section>
+
 
 
   <!-- MENU -->
