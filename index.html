@@ -291,6 +291,292 @@
         padding: 20px;
       }
     }
+    
+/* ==============================
+   NASTA BHAI - MODERN DESIGN
+============================== */
+
+:root {
+    --brand-green: #087443;
+    --brand-dark: #064e35;
+    --brand-orange: #ff7900;
+    --brand-light: #f0faf4;
+}
+
+/* Website background */
+body {
+    background: #f7faf7;
+    color: #26352c;
+    font-family: Arial, "Noto Sans Bengali", sans-serif;
+}
+
+/* Modern sticky header */
+header {
+    background: rgba(255, 255, 255, 0.97);
+    color: var(--brand-dark);
+    padding: 15px 20px;
+    box-shadow: 0 3px 16px rgba(0, 70, 40, 0.10);
+    border-bottom: 2px solid #e6f3e9;
+}
+
+.logo {
+    color: var(--brand-green);
+    font-size: 27px;
+    letter-spacing: 0.2px;
+}
+
+nav a {
+    color: var(--brand-dark);
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: 0.25s ease;
+}
+
+nav a:hover {
+    background: var(--brand-light);
+    color: var(--brand-orange);
+    text-decoration: none;
+}
+
+/* Attractive hero banner */
+.hero {
+    background:
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(255, 255, 255, 0.16),
+            transparent 30%
+        ),
+        linear-gradient(
+            125deg,
+            #075e3d 0%,
+            #07834b 58%,
+            #f17a13 100%
+        );
+    color: white;
+    padding: 78px 20px;
+    border-radius: 0 0 28px 28px;
+}
+
+.hero h1 {
+    font-size: clamp(28px, 4vw, 43px);
+    line-height: 1.4;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.hero p {
+    max-width: 650px;
+    margin: 0 auto 28px;
+    font-size: 19px;
+    line-height: 1.9;
+}
+
+.hero-btn {
+    background: var(--brand-orange);
+    color: white;
+    padding: 14px 30px;
+    border-radius: 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.hero-btn:hover {
+    background: #e76600;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Section headings */
+.section-title {
+    color: var(--brand-dark);
+    font-weight: 800;
+    margin-bottom: 28px;
+}
+
+#menu .section-title::after {
+    content: "";
+    display: block;
+    width: 65px;
+    height: 4px;
+    background: var(--brand-orange);
+    border-radius: 5px;
+    margin: 10px auto 0;
+}
+
+/* Product cards */
+#menuGrid {
+    gap: 22px;
+}
+
+.product-card {
+    border: 1px solid #e5eee7;
+    border-radius: 18px;
+    padding: 14px;
+    overflow: hidden;
+    box-shadow: 0 5px 18px rgba(0, 70, 40, 0.07);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 26px rgba(0, 70, 40, 0.13);
+}
+
+.product-icon img {
+    border-radius: 12px !important;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-icon img {
+    transform: scale(1.03);
+}
+
+.product-card h3 {
+    color: var(--brand-dark);
+    margin-top: 12px;
+}
+
+.price {
+    color: var(--brand-green);
+    font-size: 22px;
+    font-weight: 800;
+}
+
+/* Quantity buttons */
+.quantity-control button {
+    background: var(--brand-green);
+    box-shadow: 0 2px 6px rgba(0, 80, 45, 0.15);
+    transition: 0.2s ease;
+}
+
+.quantity-control button:hover {
+    background: var(--brand-orange);
+    transform: scale(1.06);
+}
+
+.quantity {
+    color: var(--brand-dark);
+}
+
+/* Order form */
+.order-box,
+.contact-box {
+    border: 1px solid #e5eee7;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0, 70, 40, 0.08);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d7e3da;
+    border-radius: 10px;
+    font-size: 16px;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--brand-green);
+    box-shadow: 0 0 0 3px rgba(8, 116, 67, 0.12);
+}
+
+.summary {
+    background: #f0faf4;
+    border: 1px solid #dcefe2;
+    border-radius: 14px;
+}
+
+.total-row {
+    color: var(--brand-green);
+    border-top-color: #cfe4d5;
+}
+
+/* Main order button */
+.order-btn {
+    background: var(--brand-green);
+    border-radius: 12px;
+    box-shadow: 0 5px 14px rgba(0, 100, 55, 0.17);
+    transition: 0.2s ease;
+}
+
+.order-btn:hover {
+    background: var(--brand-dark);
+    transform: translateY(-2px);
+}
+
+/* Contact and footer */
+.contact-box {
+    background: linear-gradient(145deg, #ffffff, #f0faf4);
+}
+
+footer {
+    background: var(--brand-dark);
+    color: white;
+    padding: 28px 20px;
+    border-top: 4px solid var(--brand-orange);
+}
+
+/* Mobile improvements */
+@media (max-width: 650px) {
+    .header-inner {
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 25px;
+    }
+
+    nav {
+        gap: 5px;
+    }
+
+    nav a {
+        padding: 7px 9px;
+        font-size: 14px;
+    }
+
+    .hero {
+        padding: 55px 18px;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .hero h1 {
+        font-size: 29px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    #menuGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .product-card {
+        padding: 10px;
+        border-radius: 14px;
+    }
+
+    .product-icon img {
+        height: 125px !important;
+    }
+
+    .product-card h3 {
+        font-size: 18px;
+    }
+
+    .order-box {
+        padding: 18px;
+    }
+}
+
   </style>
 </head>
 
