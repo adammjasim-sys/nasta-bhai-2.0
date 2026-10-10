@@ -984,6 +984,18 @@ footer {
 
       <div class="summary">
 
+<div id="cartCounter" style="
+    background:#e8f7ed;
+    color:#064e35;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:bold;
+    font-size:16px;
+    margin-bottom:12px;
+">
+    🛒 কার্টে পণ্য: 0টি
+</div>
+
         <h3>🛒 অর্ডারের হিসাব</h3>
 
         <div id="selectedItems">
@@ -1325,6 +1337,12 @@ footer {
 
       }
 
+
+const cartCounter = document.getElementById("cartCounter");
+
+if (cartCounter) {
+  cartCounter.textContent = `🛒 কার্টে পণ্য: ${totalPieces}টি`;
+}
 
       const delivery =
         totalPieces * deliveryPerPiece;
