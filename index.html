@@ -1572,7 +1572,24 @@ function clearCart() {
             product.price * product.qty
 
         }));
+/* CHECKOUT CONFIRMATION */
 
+if (selectedProducts.length === 0) {
+  alert("আপনার কার্ট খালি। আগে পণ্য নির্বাচন করুন।");
+  return;
+}
+
+const checkoutMessage =
+  "🛒 অর্ডার যাচাই করুন\n\n" +
+  orderText + "\n" +
+  "পণ্যমূল্য: ৳" + subtotal + "\n" +
+  "ডেলিভারি চার্জ: ৳" + delivery + "\n" +
+  "সর্বমোট: ৳" + total + "\n\n" +
+  "আপনি কি অর্ডারটি নিশ্চিত করতে চান?";
+
+if (!confirm(checkoutMessage)) {
+  return;
+}
 
       /* =================================
          SAVE TO SUPABASE
