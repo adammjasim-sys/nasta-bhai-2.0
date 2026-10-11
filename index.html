@@ -995,7 +995,23 @@ footer {
 ">
     🛒 কার্টে পণ্য: 0টি
 </div>
-
+<button
+  type="button"
+  onclick="clearCart()"
+  style="
+    background:#dc3545;
+    color:white;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:12px;
+  "
+>
+  🗑️ Clear Cart
+</button>
         <h3>🛒 অর্ডারের হিসাব</h3>
 
         <div id="selectedItems">
@@ -1392,7 +1408,20 @@ function removeProduct(productId) {
 
   updateSummary();
 }
+function clearCart() {
 
+  const confirmClear = confirm(
+    "আপনি কি কার্টের সব পণ্য মুছে ফেলতে চান?"
+  );
+
+  if (!confirmClear) return;
+
+  products.forEach(product => {
+    product.qty = 0;
+  });
+
+  updateSummary();
+}
     /* =================================
        SEND ORDER
     ================================= */
