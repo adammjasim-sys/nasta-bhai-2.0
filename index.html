@@ -1581,7 +1581,12 @@ function clearCart() {
 
     
 /* SELECTED PRODUCTS */
-
+alert(
+  "সকালের পণ্য: " +
+  products.filter(p => p.qty > 0).length +
+  "\nবিকালের পণ্য: " +
+  afternoonProducts.filter(p => p.qty > 0).length
+);
 const allProducts = [
   ...products,
   ...afternoonProducts
