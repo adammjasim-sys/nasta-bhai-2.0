@@ -885,11 +885,34 @@ footer {
   <!-- MENU -->
   <section id="menu">
 
-    <h2 class="section-title">
-      🍴 আমাদের মেনু
-    </h2>
+    
+<h2 class="section-title">
+  🍴 আমাদের মেনু
+</h2>
 
-    <div id="menuGrid"></div>
+<!-- নাস্তার সময় নির্বাচন -->
+<div style="text-align:center; margin:15px 0;">
+  <button
+    type="button"
+    id="morningMenuBtn"
+    onclick="selectMeal('morning')"
+    style="padding:10px 16px; margin:5px; border:0; border-radius:8px; cursor:pointer; background:#087443; color:white;"
+  >
+    🌅 সকালের নাস্তা
+  </button>
+
+  <button
+    type="button"
+    id="afternoonMenuBtn"
+    onclick="selectMeal('afternoon')"
+    style="padding:10px 16px; margin:5px; border:0; border-radius:8px; cursor:pointer; background:#eeeeee; color:#333;"
+  >
+    🌇 বিকালের নাস্তা
+  </button>
+</div>
+
+<div id="menuGrid"></div>
+
 
   </section>
 
@@ -1238,15 +1261,41 @@ const afternoonProducts = [
        SHOW MENU
     ================================= */
 
-    function renderMenu() {
+    
+let selectedMeal = "morning";
 
-      const menuGrid =
-        document.getElementById("menuGrid");
+function selectMeal(meal) {
+  selectedMeal = meal;
 
-      menuGrid.innerHTML = "";
+  document.getElementById("morningMenuBtn").style.background =
+    meal === "morning" ? "#087443" : "#eeeeee";
 
+  document.getElementById("morningMenuBtn").style.color =
+    meal === "morning" ? "white" : "#333";
 
-      products.forEach(product => {
+  document.getElementById("afternoonMenuBtn").style.background =
+    meal === "afternoon" ? "#087443" : "#eeeeee";
+
+  document.getElementById("afternoonMenuBtn").style.color =
+    meal === "afternoon" ? "white" : "#333";
+
+  renderMenu();
+}
+
+function renderMenu() {
+
+  const menuGrid =
+    document.getElementById("menuGrid");
+
+  menuGrid.innerHTML = "";
+
+  const currentProducts =
+    selectedMeal === "morning"
+      ? products
+      : afternoonProducts;
+
+  currentProducts.forEach(product => {
+
 
         const card =
           document.createElement("div");
@@ -1309,156 +1358,145 @@ const afternoonProducts = [
        CHANGE QUANTITY
     ================================= */
 
-    function changeQty(id, change) {
+   
+function changeQty(id, change) {
 
-      const product =
-        products.find(p => p.id === id);
+  const product =
+    [...products, ...afternoonProducts]
+      .find(p => p.id === id);
 
+  if (!product) {
+    return;
+  }
 
-      if (!product) {
-        return;
-      }
+  product.qty += change;
 
+  if (product.qty < 0) {
+    product.qty = 0;
+  }
 
-      product.qty += change;
+  const qtyElement =
+    document.getElementById(`qty-${id}`);
 
+  if (qtyElement) {
+    qtyElement.textContent = product.qty;
+  }
 
-      if (product.qty < 0) {
-        product.qty = 0;
-      }
+  updateSummary();
 
+}
 
-      const qtyElement =
-        document.getElementById(`qty-${id}`);
-
-
-      if (qtyElement) {
-
-        qtyElement.textContent =
-          product.qty;
-
-      }
-
-
-      updateSummary();
-
-    }
 
 
     /* =================================
        UPDATE SUMMARY
     ================================= */
 
-    function updateSummary() {
+   
+function updateSummary() {
 
-      const selectedProducts =
-        products.filter(
-          product => product.qty > 0
-        );
+  const allProducts = [
+    ...products,
+    ...afternoonProducts
+  ];
 
+  const selectedProducts =
+    allProducts.filter(
+      product => product.qty > 0
+    );
 
-      const selectedItems =
-        document.getElementById("selectedItems");
+  const selectedItems =
+    document.getElementById("selectedItems");
 
+  let subtotal = 0;
+  let totalPieces = 0;
 
-      let subtotal = 0;
-      let totalPieces = 0;
+  if (selectedProducts.length === 0) {
 
+    selectedItems.innerHTML =
+      "এখনো কোনো পণ্য নির্বাচন করা হয়নি।";
 
-      if (selectedProducts.length === 0) {
+  } else {
 
-        selectedItems.innerHTML =
-          "এখনো কোনো পণ্য নির্বাচন করা হয়নি।";
+    let html = "";
 
-      } else {
+    selectedProducts.forEach(product => {
 
-        let html = "";
+      const itemTotal =
+        product.price * product.qty;
 
+      subtotal += itemTotal;
+      totalPieces += product.qty;
 
-        selectedProducts.forEach(product => {
+      html += `
+        <div class="summary-row">
+          <span>
+            ${product.name} × ${product.qty}
+          </span>
 
-          const itemTotal =
-            product.price * product.qty;
+          <span>
+            ৳${itemTotal}
 
+            <button
+              type="button"
+              onclick="removeProduct(${product.id})"
+              style="
+                background:#dc3545;
+                color:white;
+                border:none;
+                border-radius:6px;
+                padding:5px 9px;
+                margin-left:8px;
+                cursor:pointer;
+              "
+            >
+              🗑️ Remove
+            </button>
+          </span>
+        </div>
+      `;
+    });
 
-          subtotal += itemTotal;
+    selectedItems.innerHTML = html;
+  }
 
-          totalPieces += product.qty;
+  const cartCounter =
+    document.getElementById("cartCounter");
 
+  if (cartCounter) {
+    cartCounter.textContent =
+      `🛒 কার্টে পণ্য: ${totalPieces}টি`;
 
-          html += `
-    <div class="summary-row">
-      <span>
-        ${product.name} × ${product.qty}
-      </span>
+    cartCounter.classList.remove("cart-highlight");
 
-      <span>
-        ৳${itemTotal}
+    void cartCounter.offsetWidth;
 
-        <button
-          type="button"
-          onclick="removeProduct(${product.id})"
-          style="
-            background:#dc3545;
-            color:white;
-            border:none;
-            border-radius:6px;
-            padding:5px 9px;
-            margin-left:8px;
-            cursor:pointer;
-          "
-        >
-          🗑️ Remove
-        </button>
-      </span>
-    </div>
-`;
+    cartCounter.classList.add("cart-highlight");
+  }
 
-        });
+  const delivery =
+    totalPieces * deliveryPerPiece;
 
+  const total =
+    subtotal + delivery;
 
-        selectedItems.innerHTML = html;
+  document.getElementById("subtotal")
+    .textContent = `৳${subtotal}`;
 
-      }
+  document.getElementById("delivery")
+    .textContent = `৳${delivery}`;
 
-
-const cartCounter = document.getElementById("cartCounter");
-
-if (cartCounter) {
-  cartCounter.textContent = `🛒 কার্টে পণ্য: ${totalPieces}টি`;
-
-  cartCounter.classList.remove("cart-highlight");
-
-  void cartCounter.offsetWidth;
-
-  cartCounter.classList.add("cart-highlight");
+  document.getElementById("total")
+    .textContent = `৳${total}`;
 }
 
-      const delivery =
-        totalPieces * deliveryPerPiece;
 
-
-      const total =
-        subtotal + delivery;
-
-
-      document.getElementById("subtotal")
-        .textContent = `৳${subtotal}`;
-
-
-      document.getElementById("delivery")
-        .textContent = `৳${delivery}`;
-
-
-      document.getElementById("total")
-        .textContent = `৳${total}`;
-
-    }
 function removeProduct(productId) {
 
-  const product = products.find(
-    item => item.id === productId
-  );
+  const product = [
+    ...products,
+    ...afternoonProducts
+  ].find(item => item.id === productId);
 
   if (!product) return;
 
@@ -1466,6 +1504,7 @@ function removeProduct(productId) {
 
   updateSummary();
 }
+
 function clearCart() {
 
   const confirmClear = confirm(
@@ -1540,15 +1579,29 @@ function clearCart() {
       }
 
 
-      /* SELECTED PRODUCTS */
+    
+/* SELECTED PRODUCTS */
 
-      const selectedProducts =
-        products.filter(
-          product => product.qty > 0
-        );
+const allProducts = [
+  ...products,
+  ...afternoonProducts
+];
 
+const selectedProducts =
+  allProducts.filter(
+    product => product.qty > 0
+  );
 
-      if (selectedProducts.length === 0) {
+if (selectedProducts.length === 0) {
+
+  alert(
+    "দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।"
+  );
+
+  return;
+
+}
+ {
 
         alert(
           "দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।"
@@ -1650,34 +1703,60 @@ if (!deliveryDate) {
     alert("⚠️ অনুগ্রহ করে ডেলিভারি তারিখ নির্বাচন করুন।");
     return;
 }
- // DELIVERY TIME RULE
+
+
+
+/* ORDER WINDOW */
+
 const now = new Date();
 
-const selectedDate = new Date(deliveryDate + "T09:00:00");
+const selectedDate = new Date(
+  deliveryDate + "T00:00:00"
+);
 
-// Order window:
-// Previous day 09:00 AM → Previous day 11:00 PM
+let orderOpenTime;
+let orderCloseTime;
 
-const orderOpenTime = new Date(selectedDate);
-orderOpenTime.setDate(orderOpenTime.getDate() - 1);
-orderOpenTime.setHours(9, 0, 0, 0);
+if (selectedMeal === "afternoon") {
 
-const orderCloseTime = new Date(selectedDate);
-orderCloseTime.setDate(orderCloseTime.getDate() - 1);
-orderCloseTime.setHours(23, 0, 0, 0);
+  // বিকালের নাস্তা: একই দিন সকাল ৯টা থেকে দুপুর ১২টা
+  orderOpenTime = new Date(deliveryDate + "T09:00:00");
+  orderCloseTime = new Date(deliveryDate + "T12:00:00");
 
-// Check order time
+} else {
+
+  // সকালের নাস্তা: আগের দিন সকাল ৯টা থেকে রাত ১১টা
+  orderOpenTime = new Date(selectedDate);
+  orderOpenTime.setDate(orderOpenTime.getDate() - 1);
+  orderOpenTime.setHours(9, 0, 0, 0);
+
+  orderCloseTime = new Date(selectedDate);
+  orderCloseTime.setDate(orderCloseTime.getDate() - 1);
+  orderCloseTime.setHours(23, 0, 0, 0);
+
+}
 
 if (now < orderOpenTime || now > orderCloseTime) {
 
+  if (selectedMeal === "afternoon") {
+
     alert(
-        "⚠️ এই ডেলিভারি তারিখের অর্ডার এখন নেওয়া হচ্ছে না।\n\n" +
-        "অর্ডার নেওয়ার সময়:\n" +
-        "আগের দিন সকাল ৯:০০টা থেকে রাত ১১:০০টা পর্যন্ত।"
+      "⚠️ বিকালের নাস্তার অর্ডার নেওয়ার সময়:\n" +
+      "সেদিন সকাল ৯:০০টা থেকে দুপুর ১২:০০টা পর্যন্ত।"
     );
 
-    return;
-}     
+  } else {
+
+    alert(
+      "⚠️ সকালের নাস্তার অর্ডার নেওয়ার সময়:\n" +
+      "আগের দিন সকাল ৯:০০টা থেকে রাত ১১:০০টা পর্যন্ত।"
+    );
+
+  }
+
+  return;
+}
+    
 const { data: orderData, error } = await supabaseClient
     .from("orders")
     .insert([{
