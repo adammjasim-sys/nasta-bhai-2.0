@@ -1704,7 +1704,21 @@ if (!deliveryDate) {
     return;
 }
 
+```javascript
+// বিকালের নাস্তার ডেলিভারি তারিখ আজকের দিন হতে হবে
+if (selectedMeal === "afternoon") {
+  const today = new Date();
+  const todayDate =
+    today.getFullYear() + "-" +
+    String(today.getMonth() + 1).padStart(2, "0") + "-" +
+    String(today.getDate()).padStart(2, "0");
 
+  if (deliveryDate !== todayDate) {
+    alert("⚠️ বিকালের নাস্তার অর্ডার শুধু আজকের ডেলিভারির জন্য করা যাবে।");
+    return;
+  }
+}
+```
 
 /* ORDER WINDOW */
 
