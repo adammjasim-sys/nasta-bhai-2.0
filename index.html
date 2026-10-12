@@ -1590,7 +1590,12 @@ const selectedProducts =
   allProducts.filter(
     product => product.qty > 0
   );
-
+alert(
+  "মোট পণ্য: " + allProducts.length +
+  "\nনির্বাচিত পণ্য: " + selectedProducts.length +
+  "\nপরিমাণ: " +
+  allProducts.map(p => p.name + "=" + p.qty).join(", ")
+);
 if (selectedProducts.length === 0) {
   alert(
     "দয়া করে অন্তত একটি পণ্য নির্বাচন করুন।"
