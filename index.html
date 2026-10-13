@@ -1793,23 +1793,7 @@ const orderId = orderData.id;
 alert("অর্ডার সফলভাবে গ্রহণ করা হয়েছে!\n\nআপনার Order ID: #" + orderId);
 
 
-      if (error) {
-
-        console.error(
-          "Supabase Error:",
-          error
-        );
-
-
-        alert(
-          "অর্ডার সংরক্ষণ করা যায়নি।\n\n" +
-          "দয়া করে আবার চেষ্টা করুন।"
-        );
-
-
-        return;
-
-      }
+    
 
 
       /* =================================
